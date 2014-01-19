@@ -1,0 +1,46 @@
+/* line 1, ../sass/main.scss */
+body {
+  font: 12px/1.8 Tahoma;
+}
+
+/* line 5, ../sass/main.scss */
+h1, h2, h3, h4, h5, h6, p, ul, li, dl, dt, dd {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 10, ../sass/main.scss */
+h1 {
+  text-align: center;
+}
+
+/* line 13, ../sass/main.scss */
+#stuff {
+  border: 1px solid #888;
+  height: 24px;
+  padding: 3px;
+  width: 300px;
+  margin: 0 auto;
+  background-color: #DDD;
+  cursor: move;
+}
+
+/* line 22, ../sass/main.scss */
+#stuff.dragstart {
+  border-color: #DDD;
+  background-color: #EEE;
+}
+
+/* line 26, ../sass/main.scss */
+#box {
+  border: 1px solid #DDD;
+  background-color: #EEE;
+  width: 500px;
+  height: 300px;
+  margin: 60px auto;
+}
+
+/* line 33, ../sass/main.scss */
+#box.active {
+  border-color: red;
+}

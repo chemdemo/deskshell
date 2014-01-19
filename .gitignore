@@ -1,0 +1,11 @@
+.git
+.DS_Store
+.idea
+*.log
+*.psd
+/.sass-cache
+/bin
+/logs
+/node_modules
+/tmp
+/client/.tmp
