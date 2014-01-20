@@ -9,3 +9,4 @@
 /node_modules
 /tmp
 /client/.tmp
+npm-debug.log
