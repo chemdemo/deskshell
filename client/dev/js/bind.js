@@ -2,12 +2,16 @@
 
 module.exports = function() {
     var createSocket = function() {
-        var socket = io.connect('http://localhost:8888');
+        var socket = io.connect('/cmd');
         socket.on('connect', function(data) {
             socket.send('client connected!');
 
             socket.on('message', function(msg) {
                 console.log(msg);
+            });
+
+            document.addEventListener('click', function() {
+                socket.send('clicked!');
             });
         });
     };

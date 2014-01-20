@@ -44,3 +44,19 @@ h1 {
 #box.active {
   border-color: red;
 }
+
+/* line 37, ../sass/main.scss */
+#console {
+  width: 80%;
+  height: 60%;
+  margin: 0 auto;
+}
+/* line 41, ../sass/main.scss */
+#console textarea {
+  display: block;
+  color: green;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border: none;
+}

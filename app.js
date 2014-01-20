@@ -34,9 +34,24 @@ app.configure('production', function() {
     app.use(express.static(p, {maxAge: conf.MAXAGE}));
 });
 
-io.sockets.on('connection', function(socket) {
-    socket.send(fs.readdirSync(__dirname).toString());
+io.configure('procuction', function() {
+    io.enable('browser client etag');
+    io.set('log level', 1);
 
+    io.set('transports', [
+        'websocket'
+        , 'flashsocket'
+        , 'htmlfile'
+        , 'xhr-polling'
+        , 'jsonp-polling'
+    ]);
+});
+
+io.configure('development', function() {
+    io.set('transports', ['websocket']);
+});
+
+io.of('/cmd').on('connection', function(socket) {
     socket.on('message', function(data) {
         console.log(data);
     });
