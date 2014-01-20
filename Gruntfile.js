@@ -48,7 +48,7 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     sassDir: '<%= base.dev %>/sass',
-                    cssDir: '<%= base.dev %>/sass'
+                    cssDir: '<%= base.dev %>/css'
                 }
             },
             dist: {
@@ -180,7 +180,7 @@ module.exports = function(grunt) {
         grunt.task.run('imagemin');
         // minify fonts
         grunt.task.run('copy:fonts');
-        // update image name by the md5 value 
+        // update image name by the md5 value
         // grunt.task.run('filerev');
         // update timestemp
         grunt.task.run('replace');
