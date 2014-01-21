@@ -146,8 +146,30 @@ ul, li {
 .view .nav-tabs > li > a {
   border-radius: 0;
 }
+/* line 123, ../sass/main.scss */
+.view .files {
+  padding: 2em;
+  color: #555;
+}
+/* line 126, ../sass/main.scss */
+.view .files li {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  cursor: pointer;
+}
+/* line 132, ../sass/main.scss */
+.view .files li:hover {
+  color: #000;
+}
+/* line 136, ../sass/main.scss */
+.view .files .fa {
+  display: block;
+  font-size: 3em;
+}
 
-/* line 125, ../sass/main.scss */
+/* line 143, ../sass/main.scss */
 .console {
   width: 100%;
   margin: 0 auto;

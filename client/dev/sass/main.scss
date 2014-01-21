@@ -120,6 +120,24 @@ ul, li {
             border-bottom-color: transparent;
         }*/
     }
+    .files {
+        padding: 2em;
+        color: #555;
+        li {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            cursor: pointer;
+            &:hover {
+                color: #000;
+            }
+        }
+        .fa {
+            display: block;
+            font-size: 3em;
+        }
+    }
 }
 
 .console {
