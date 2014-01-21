@@ -3,14 +3,166 @@
 <head>
 <meta charset="utf-8">
 <title>Web console built with Node.js</title>
-<link href="/css/font-awesome.css" rel="stylesheet" />
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/font-awesome.min.css" rel="stylesheet" />
 <link href="/css/main.css?_t=@@timestamp" rel="stylesheet" />
 </head>
 <body>
-    <div id="console">
-        <textarea><b>&gt;&gt;</b></textarea>
+    <div id="header" class="header">
+        <span class="user">dmyang</span>
+        <h1>Web GUI</h1>
     </div>
+
+    <div id="gui" class="gui show-grid">
+        <div id="sidebar" class="sidebar col-md-2">
+            <div id="path" class="path">
+                <input type="text" id="path-val" class="path-val" />
+            </div>
+            <div class="path-tree" id="path-tree">
+                <ul>
+                    <li>
+                        <span data-path="/data">
+                            <i class="fa fa-caret-right"></i>data
+                        </span>
+                    </li>
+                    <li>
+                        <span data-path="/data/sites">
+                            <i class="fa fa-caret-down"></i>sites
+                        </span>
+                        <ul>
+                            <li>
+                                <span data-path="/data">
+                                    <i class="fa fa-caret-right"></i>data
+                                </span>
+                            </li>
+                            <li>
+                                <span data-path="/sites">
+                                    <i class="fa fa-caret-down"></i>sites
+                                </span>
+                                <ul>
+                                    <li>
+                                        <span class="selected" data-path="/data">
+                                            <i class="fa fa-caret-right"></i>data
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span data-path="/sites">
+                                            <i class="fa fa-caret-down"></i>sites
+                                        </span>
+                                        <ul>
+                                            <li>
+                                                <span class="selected" data-path="/data">
+                                                    <i class="fa fa-caret-right"></i>data
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span data-path="/sites">
+                                                    <i class="fa fa-caret-down"></i>sites
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span data-path="/sites">
+                                                    www.aaa.com
+                                                </span>
+                                                <ul>
+                                                    <li>
+                                                        <span class="selected" data-path="/data">
+                                                            <i class="fa fa-caret-right"></i>data
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        <span data-path="/sites">
+                                                            <i class="fa fa-caret-down"></i>sites
+                                                        </span>
+                                                        <ul>
+                                                            <li>
+                                                                <span class="selected" data-path="/data">
+                                                                    <i class="fa fa-caret-right"></i>data
+                                                                </span>
+                                                            </li>
+                                                            <li>
+                                                                <span data-path="/sites">
+                                                                    <i class="fa fa-caret-down"></i>sites
+                                                                </span>
+                                                            </li>
+                                                            <li>
+                                                                <span data-path="/sites">
+                                                                    www.aaa.com
+                                                                </span>
+                                                                <ul>
+                                                                    <li>
+                                                                        <span class="selected" data-path="/data">
+                                                                            <i class="fa fa-caret-right"></i>data
+                                                                        </span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <span data-path="/sites">
+                                                                            <i class="fa fa-caret-down"></i>sites
+                                                                        </span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <span data-path="/sites">
+                                                                            www.aaa.com
+                                                                        </span>
+                                                                        <ul>
+                                                                            <li>
+                                                                                <span data-path="/sites">
+                                                                                    www.aaa.com
+                                                                                </span>
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        <span data-path="/sites">
+                                                                                            www.aaa.com
+                                                                                        </span>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <span data-path="/sites">
+                                                            www.aaa.com
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <span data-path="/sites">
+                                            www.aaa.com
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="view" class="view col-md-10">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#files" data-toggle="tab">Files</a></li>
+                <li><a href="#edit" data-toggle="tab">Profile</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="files">111111</div>
+                <div class="tab-pane" id="edit">222222</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="console" class="console"></div>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
+<script src="/js/jquery.min.js"></script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script> -->
+<script src="/js/bootstrap.min.js"></script>
 <!-- <script src="/socket.io/socket.io.js"></script> -->
-<!-- <script src="/js/main.js?_t=@@timestamp"></script> -->
+<script src="/js/main.js?_t=@@timestamp"></script>
 </body>
 </html>
