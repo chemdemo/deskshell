@@ -33,6 +33,24 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            js: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= base.dev %>/',
+                    dest: '<%= base.build %>/',
+                    src: ['js/{,*/}*.min.js']
+                }]
+            },
+            css: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= base.dev %>/',
+                    dest: '<%= base.build %>/',
+                    src: ['css/{,*/}*.min.css']
+                }]
+            },
             fonts: {
                 files: [{
                     expand: true,
@@ -68,7 +86,7 @@ module.exports = function(grunt) {
             options: {
                 optimizationLevel: 3
             },
-            dynamic: {
+            dist: {
                 files: [
                     {
                         expand: true,
@@ -177,9 +195,9 @@ module.exports = function(grunt) {
         // minify css and copy
         grunt.task.run('compass:dist');
         // minify images
-        grunt.task.run('imagemin');
-        // minify fonts
-        grunt.task.run('copy:fonts');
+        // grunt.task.run('imagemin');
+        // minify fonts & css & js
+        grunt.task.run('copy');
         // update image name by the md5 value
         // grunt.task.run('filerev');
         // update timestemp

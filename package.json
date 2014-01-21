@@ -14,7 +14,6 @@
     "load-grunt-tasks": "~0.1.0",
     "time-grunt": "~0.1.1",
     "grunt-contrib-compass": "~0.5.0",
-    "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-browserify": "*",
     "grunt-contrib-imagemin": "~0.5.0",
