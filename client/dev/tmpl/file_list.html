@@ -1,0 +1,8 @@
+<ul>
+<% list.forEach(function(item) { %>
+    <li>
+        <i class="fa fa-<%= item.isDir ? 'folder' : 'file' %>-o"></i>
+        <span class="path-name" data-path="<%= item.path %>"><%= item.filename %></span>
+    </li>
+<% }); %>
+</ul>

@@ -1,0 +1,3 @@
+this["Tmpl"] = this["Tmpl"] || {};
+
+this["Tmpl"]["fileList"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) {__p += '<ul>\n'; list.forEach(function(item) { ;__p += '\n<li>\n<i class="fa fa-' +((__t = ( item.isDir ? 'folder' : 'file' )) == null ? '' : __t) +'-o"></i>\n<span class="path-name" data-path="' +((__t = ( item.path )) == null ? '' : __t) +'">' +((__t = ( item.filename )) == null ? '' : __t) +'</span>\n</li>\n'; }); ;__p += '\n</ul>';}return __p};
