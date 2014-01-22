@@ -145,19 +145,15 @@ module.exports = function(grunt) {
         browserify: {
             dev: {
                 options: {
-                    debug: true,
-                    ignore: ['<%= base.dev %>/js/*.min.js']
+                    debug: true
                 },
                 files: {
-                    '<%= base.dev %>/js/main.min.js': ['<%= base.dev %>/js/initialize.js']
+                    '<%= base.dev %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
                 }
             },
             dist: {
-                options: {
-                    ignore: ['<%= base.build %>/js/main.js']
-                },
                 files: {
-                    '<%= base.build %>/js/main.min.js': ['<%= base.dev %>/js/initialize.js']
+                    '<%= base.build %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
                 }
             }
         },
