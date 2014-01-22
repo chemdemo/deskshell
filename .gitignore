@@ -9,5 +9,6 @@
 /node_modules
 /tmp
 /client/.tmp
+/client/dev/js/*.min.js
 /client/build
 npm-debug.log
