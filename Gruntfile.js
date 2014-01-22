@@ -1,5 +1,7 @@
 'use strict';
 
+var path = require('path');
+
 module.exports = function(grunt) {
     // show elapsed time at the end
     require('time-grunt')(grunt);
@@ -33,15 +35,6 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            js: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= base.dev %>/',
-                    dest: '<%= base.build %>/',
-                    src: ['js/{,*/}*.min.js']
-                }]
-            },
             css: {
                 files: [{
                     expand: true,
@@ -72,7 +65,7 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     sassDir: '<%= base.dev %>/sass',
-                    cssDir: '<%= base.build %>/css',
+                    cssDir: '<%= base.dev %>/css',
                     outputStyle: 'compressed',
                     force: true,
                     environment: 'production',
@@ -98,14 +91,54 @@ module.exports = function(grunt) {
             }
         },
 
+        jst: {
+            compile: {
+                options: {
+                    // module: true,
+                    // provider: 'lodash',
+                    namespace: 'Tmpl',
+                    processName: function(filename) {
+                        var f = path.basename(filename, '.html');
+                        return f.replace(/(?:_|-)(\w{1}?)/g, function(m) {
+                            return m.toUpperCase().slice(1);
+                        });
+                    },
+                    processContent: function(src) {
+                        return src.replace(/(^\s+|\s+$)/gm, '');
+                    },
+                    // templateSettings: {
+                    //     evaluate: /\{\{=(.+?)\}\}/g,
+                    //     interpolate: /\{\{(.+?)\}\}/g,
+                    //     escape: /\{\{-(.+?)\}\}/g
+                    // },
+                    prettify: true
+                },
+                files: {
+                    '<%= base.dev %>/js/tmpl.js': ['<%= base.dev %>/tmpl/*.html']
+                }
+            }
+        },
+
         watch: {
             'build-css': {
                 files: ['<%= base.dev %>/sass/**/*.{scss,sass}'],
                 tasks: ['compass:dev']
             },
             'build-js': {
-                files: ['<%= base.dev %>/js/*.js', '!<%= base.dev %>/js/main.js'],
+                files: [
+                    '<%= base.dev %>/js/*.js',
+                    // '!<%= base.dev %>/js/tmpl.js',
+                    '!<%= base.dev %>/js/main.js'
+                ],
                 tasks: ['browserify:dev']
+            },
+            'build-tmpl': {
+                files: ['<%= base.dev %>/tmpl/*.html'],
+                tasks: ['jst']
+            },
+            'build-libs': {
+                files: ['<%= base.dev %>/js/libs/*.js'],
+                tasks: ['concat:dev']
             }
         },
 
@@ -113,10 +146,10 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     debug: true,
-                    ignore: ['<%= base.dev %>/js/main.js']
+                    ignore: ['<%= base.dev %>/js/*.min.js']
                 },
                 files: {
-                    '<%= base.dev %>/js/main.js': ['<%= base.dev %>/js/initialize.js']
+                    '<%= base.dev %>/js/main.min.js': ['<%= base.dev %>/js/initialize.js']
                 }
             },
             dist: {
@@ -124,19 +157,35 @@ module.exports = function(grunt) {
                     ignore: ['<%= base.build %>/js/main.js']
                 },
                 files: {
-                    '<%= base.build %>/js/main.js': ['<%= base.dev %>/js/initialize.js']
+                    '<%= base.build %>/js/main.min.js': ['<%= base.dev %>/js/initialize.js']
                 }
+            }
+        },
+
+        concat: {
+            dev: {
+                src: [
+                    '<%= base.dev %>/js/libs/jquery.js',
+                    '<%= base.dev %>/js/libs/underscore.js',
+                    '<%= base.dev %>/js/libs/bootstrap.js',
+                ],
+                dest: '<%= base.dev %>/js/libs.min.js'
             }
         },
 
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                    '<%= grunt.template.today("yyyy-mm-dd") %> */'
+                compress: true,
+                report: 'gzip',
+                preserveComments: false/*,
+                mangle: {
+                    except: ['jQuery', 'Underscore']
+                }*/
             },
             dist: {
                 files: {
-                    '<%= base.build %>/js/main.js': ['<%= base.build %>/js/main.js']
+                    '<%= base.build %>/js/libs.min.js': ['<%= base.dev %>/js/libs.min.js'],
+                    '<%= base.build %>/js/main.min.js': ['<%= base.build %>/js/main.min.js']
                 }
             }
         },
@@ -182,6 +231,9 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', function() {
+        grunt.task.run('jst');
+        // concat js libs files
+        grunt.task.run('concat');
         grunt.task.run('browserify:dev');
         grunt.task.run('compass:dev');
         grunt.task.run('watch');
@@ -189,14 +241,16 @@ module.exports = function(grunt) {
 
     grunt.registerTask('release', function() {
         grunt.task.run('clean:all');
+        // build templates
+        grunt.task.run('jst');
         // build js
         grunt.task.run('browserify:dist');
-        grunt.task.run('uglify:dist');
+        grunt.task.run('uglify');
         // minify css and copy
         grunt.task.run('compass:dist');
         // minify images
         // grunt.task.run('imagemin');
-        // minify fonts & css & js
+        // minify fonts & css
         grunt.task.run('copy');
         // update image name by the md5 value
         // grunt.task.run('filerev');
