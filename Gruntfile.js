@@ -103,15 +103,17 @@ module.exports = function(grunt) {
                             return m.toUpperCase().slice(1);
                         });
                     },
-                    processContent: function(src) {
-                        return src.replace(/(^\s+|\s+$)/gm, '');
-                    },
+                    prettify: true,
                     // templateSettings: {
                     //     evaluate: /\{\{=(.+?)\}\}/g,
                     //     interpolate: /\{\{(.+?)\}\}/g,
                     //     escape: /\{\{-(.+?)\}\}/g
                     // },
-                    prettify: true
+                    processContent: function(src) {
+                        return src
+                            .replace(/\<\!\-\-[\s\S]*?\-\-\>/g, '') // remove comments
+                            .replace(/(^\s+|\s+$)/gm, ''); // remove whitespaces
+                    }
                 },
                 files: {
                     '<%= base.dev %>/js/tmpl.js': ['<%= base.dev %>/tmpl/*.html']
@@ -128,7 +130,7 @@ module.exports = function(grunt) {
                 files: [
                     '<%= base.dev %>/js/*.js',
                     // '!<%= base.dev %>/js/tmpl.js',
-                    '!<%= base.dev %>/js/main.js'
+                    '!<%= base.dev %>/js/*.min.js'
                 ],
                 tasks: ['browserify:dev']
             },
