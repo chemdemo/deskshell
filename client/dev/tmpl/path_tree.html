@@ -1,0 +1,23 @@
+<!--
+data model:
+[
+    {
+        p: '', // path
+        n: '', // pathname
+        t: 0, // path type , 0 -> directory, 1 -> file
+    }
+]
+-->
+
+<ul>
+<% list.forEach(function(item) { %>
+    <li>
+        <a href="javascript: void(0);" data-path="<%= item.p %>" title="<%= item.n %>">
+            <% if(item.t === 0) { %>
+            <i class="fa fa-caret-right"></i>
+            <% } %>
+            <span class="path-name"><%= item.n %></span>
+        </a>
+    </li>
+<% }); %>
+</ul>

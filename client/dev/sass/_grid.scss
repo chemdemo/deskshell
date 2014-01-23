@@ -1,0 +1,12 @@
+.gui {
+    width: 100%;
+    .col-md-2,
+    .col-md-10 {
+        padding-left: 0;
+    }
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

@@ -1,0 +1,144 @@
+@import "compass/css3";
+@import "compass/layout";
+
+@charset "utf-8";
+
+body, button, select, textarea, input {
+    /*font-family: Microsoft YaHei, Tahoma, SimSun, Verdana;*/
+    font-family: Tahoma, Microsoft YaHei, SimSun, Verdana;;
+    font-size: 12px;
+    line-height: 1.8;
+    word-wrap: break-word;
+}
+
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+ul, li {
+    list-style: none;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, th, var, i, s {
+    font-style: normal;
+    font-weight: normal;
+}
+
+li {
+    list-style: none;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+input[type=search] {
+    -webkit-appearance: none;
+}
+
+input[type=checkbox] {
+    vertical-align: middle;
+    margin-top: -1px;
+}
+
+input, button, select, textarea {
+    outline: none
+}
+
+a img, a span, a strong, a s {
+    cursor: hand;
+}
+
+button {
+    white-space: nowrap;
+    overflow: visible;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:active {
+    outline: none;
+}
+
+a:focus {
+    -moz-outline-style: none;
+}
+
+div[contenteditable=true] {
+    -webkit-line-break: after-white-space;
+    -webkit-nbsp-mode: space;
+    -webkit-user-modify: read-write;
+    word-wrap: break-word;
+}
+
+.clearfix:before, .clearfix:after {
+    content: '.';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    width: 0;
+    height: 0;
+}
+
+.clearfix {
+    ;
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.clear {
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    width: 0;
+    height: 0;
+    clear: both;
+}
+
+.hide {
+    display: none !important;
+}
+
+.l {
+    float: left;
+}
+
+.r {
+    float: right;
+}
+
+@mixin gradient($from, $center, $to) {
+    background-color: $from;
+    background-image: -moz-linear-gradient(top, $from, $center, $to);
+    background-image: -webkit-linear-gradient(top, $from, $center, $to);
+    background-image: -o-linear-gradient(top, $from, $center, $to);
+    background-image: inear-gradient(top, $from, $center, $to);
+}

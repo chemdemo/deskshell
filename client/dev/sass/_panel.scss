@@ -1,0 +1,90 @@
+$box_size: 80px;
+
+.box_selected {
+    color: #000;
+    background-color: #EEE;
+    outline: 1px solid #DDD;
+}
+
+.close_hover {
+    cursor: pointer;
+    @include border-radius(7px, 7px);
+    background-color: #CCC;
+}
+
+.panels {
+    padding: 0;
+    height: 570px;
+    .nav {
+        /*background-color: #FCF8E3;*/
+        > li > a {
+            padding: 5px 15px;
+        }
+    }
+    .nav-tabs {
+        /*border-color: #FAEBCC;*/
+        /*border-color: #E0E0E0;*/
+        > li > a {
+            border-radius: 0;
+        }
+        /*> li > a:hover {
+            background-color: #F2DEDE;
+            border: 1px solid #F2DEDE;
+        }
+        > li.active > a,
+        > li.active > a:hover,
+        > li.active > a:focus {
+            background-color: #D9EDF7;
+            border: 1px solid #BCE8F1;
+            border-bottom-color: transparent;
+        }*/
+        .glyphicon {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            text-align: center;
+            right: 2px;
+            top: 0px;
+            color: #666;
+            display: none;
+            @include scale(0.7, 0.7);
+            &:hover {
+                @extend .close_hover;
+            }
+        }
+        .active .glyphicon,
+        li:hover .glyphicon {
+            display: block;
+            @extend .close_hover;
+        }
+    }
+    .file-list {
+        padding: 2em;
+        color: #555;
+        li {
+            display: inline-block;
+            width: $box_size;
+            height: $box_size;
+            text-align: center;
+            cursor: pointer;
+            &:hover {
+                @extend .box_selected;
+            }
+        }
+        li.selected {
+            @extend .box_selected;
+        }
+        .fa {
+            font-size: 3em;
+            margin-top: 12px;
+        }
+        .path-name {
+            display: block;
+            width: $box_size - 10px;
+            margin: 0 auto;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
+}

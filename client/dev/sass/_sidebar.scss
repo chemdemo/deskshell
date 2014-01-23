@@ -1,0 +1,78 @@
+$path_color: #555;
+
+.sidebar {
+    height: 570px;
+    background-color: #D1D9E2;
+    padding-right: 0;
+    border-right: 1px solid #2A3239;
+    .path {
+        overflow: hidden;
+        border-bottom: 1px solid #2A3239;
+    }
+    .path-val {
+        color: #FFF;
+        border: none;
+        background-color: #5B6B78;
+        outline: none;
+        margin: 0;
+        padding: 0 5px;
+        width: 100%;
+        display: block;
+        height: 28px;
+        line-height: 20px;
+        &:focus {
+            background-color: #879DAF;
+        }
+    }
+    .path-tree {
+        overflow-x: auto;
+        position: relative;
+        .fa {
+            margin-right: 2px;
+            position: relative;
+        }
+        .path-name {
+            position: relative;
+        }
+        a {
+            display: block;
+            padding-left: 5px;
+            padding-right: 5px;
+            * {
+                color: #555;
+            }
+            &:before {
+                content: ' ';
+                position: absolute;
+                height: 20px;
+                width: 100%;
+                left: 0;
+                /*top: 0;*/ // 这里有学问，得研究下，top默认并不是0！
+                display: none;
+                @include gradient(#B2B2B2, #A3A3A3, #8B8B8B);
+            }
+            &:hover {
+                * {
+                    color: #000;
+                }
+                &:before {
+                    display: block;
+                    opacity: 0.2;
+                }
+            }
+        }
+        a.selected {
+            * {
+                /*color: #009FC7;*/
+                color: #FFF;
+            }
+            &:before {
+                display: block;
+                opacity: 0.5;
+            }
+        }
+        li ul {
+            padding-left: 1em;
+        }
+    }
+}

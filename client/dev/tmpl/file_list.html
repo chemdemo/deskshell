@@ -1,8 +1,20 @@
+<!--
+data model:
+[
+    {
+        p: '', // path
+        n: '', // pathname
+        t: 0, // path type , 0 -> directory, 1 -> file, 2-> package
+    }
+]
+-->
+
 <ul>
 <% list.forEach(function(item) { %>
-    <li>
-        <i class="fa fa-<%= item.isDir ? 'folder' : 'file' %>-o"></i>
-        <span class="path-name" data-path="<%= item.path %>"><%= item.filename %></span>
+    <% var tMap = {0: 'folder', 1: 'file', 2: 'briefcase'}; %>
+    <li data-path="<%= item.p %>" data-type="<%= item.t %>" title="<%= item.n %>">
+        <i class="fa fa-<%= tMap[item.t] %>"></i>
+        <span class="path-name"><%= item.n %></span>
     </li>
 <% }); %>
 </ul>

@@ -5,20 +5,12 @@
 
 'use strict';
 
-// require('./bind')();
-require('./ui');
-var tmpl = require('./tmpl');
-var data = [
-    {
-        path: '/data/sites/www.abc.com',
-        isDir: true,
-        filename: 'www.abc.com'
-    },
-    {
-        path: '/data/sites/www.abc.com/a.zip',
-        isDir: false,
-        filename: 'a.zip'
-    }
-];
+var DeskShell = module.exports = {};
 
-console.log(tmpl["Tmpl"]["fileList"]({list: data}));
+var fileMgr = require('./file_manager');
+var ui = require('./ui');
+var tmpl = require('./tmpl');
+var mock = require('./mock_data');
+
+// $('#path-tree').html(tmpl["Tmpl"]["pathTree"]({list: mock.pathList}));
+$('#files').html(tmpl["Tmpl"]["fileList"]({list: mock.fileList}));
