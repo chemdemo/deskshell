@@ -348,12 +348,17 @@ div[contenteditable=true] {
 .panels .nav-tabs li:hover .glyphicon {
   display: block;
 }
-/* line 61, ../sass/_panel.scss */
+/* line 62, ../sass/_panel.scss */
+.panels .tab-content,
+.panels .tab-pane {
+  height: 541px;
+}
+/* line 65, ../sass/_panel.scss */
 .panels .file-list {
   padding: 2em;
   color: #555;
 }
-/* line 64, ../sass/_panel.scss */
+/* line 68, ../sass/_panel.scss */
 .panels .file-list li {
   display: inline-block;
   width: 80px;
@@ -361,12 +366,12 @@ div[contenteditable=true] {
   text-align: center;
   cursor: pointer;
 }
-/* line 77, ../sass/_panel.scss */
+/* line 81, ../sass/_panel.scss */
 .panels .file-list .fa {
   font-size: 3em;
   margin-top: 12px;
 }
-/* line 81, ../sass/_panel.scss */
+/* line 85, ../sass/_panel.scss */
 .panels .file-list .path-name {
   display: block;
   width: 70px;
@@ -374,6 +379,10 @@ div[contenteditable=true] {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+/* line 94, ../sass/_panel.scss */
+.panels .ace_editor {
+  font-family: 'Consolas', 'Monaco', 'source-code-pro', monospace;
 }
 
 /* line 1, ../sass/_console.scss */

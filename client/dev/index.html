@@ -64,26 +64,27 @@
             </div>
         </div>
         <div id="panels" class="panels col-md-10">
-            <ul class="nav nav-tabs" id="panels-tabs-nav">
+            <ul class="nav nav-tabs" id="panels-tab-nav">
                 <li class="active">
                     <a href="#files" data-toggle="tab">Files</a>
-                    <i class="glyphicon glyphicon-remove" title="close"></i>
+                    <i class="glyphicon glyphicon-remove close-tab" title="close"></i>
                 </li>
                 <li>
-                    <a href="#edit" data-toggle="tab">Profile</a>
+                    <a href="#editor" data-toggle="tab">Profile</a>
                     <i class="glyphicon glyphicon-remove" title="close"></i>
                 </li>
             </ul>
 
             <div class="tab-content" id="panels-tab-content">
                 <div class="file-list tab-pane active" id="files"></div>
-                <div class="tab-pane" id="edit">222222</div>
+                <div class="tab-pane" id="editor"></div>
             </div>
         </div>
     </div>
 
     <div id="console" class="console"></div>
 <script src="/js/libs.min.js"></script>
+<script src="/js/ace-noconflict-min/ace.js"></script>
 <!-- <script src="/socket.io/socket.io.js"></script> -->
 <script src="/js/main.min.js?_t=@@timestamp"></script>
 </body>

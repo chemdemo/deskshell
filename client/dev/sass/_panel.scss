@@ -58,6 +58,10 @@ $box_size: 80px;
             @extend .close_hover;
         }
     }
+    .tab-content,
+    .tab-pane {
+        height: 541px;
+    }
     .file-list {
         padding: 2em;
         color: #555;
@@ -86,5 +90,8 @@ $box_size: 80px;
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+    }
+    .ace_editor {
+        font-family: 'Consolas', 'Monaco', 'source-code-pro', monospace;
     }
 }
