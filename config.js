@@ -4,8 +4,46 @@
 // process.env.NODE_ENV = 'production';
 
 module.exports = {
-    SYS_PORT: 8090
-    , SYS_HOST: '127.0.0.1'
-    , MAXAGE: 1000 * 60 * 60 * 24 * 30
-    , COOKIE_SECRET: 'Node_web_console_1234'
+    'host': '127.0.0.1',
+    'port': 8090,
+    'maxAge': 1000 * 60 * 60 * 24 * 30,
+    'cookieSecret': '',
+    'users': {
+        'foo': 'bar'
+    },
+    'https': {
+        'key': './server/ca.key',
+        'cert': './server/ca.crt'
+    },
+    'shell': 'sh',
+    'cwd': '/root',
+    'limitPerUser': 10,
+    'sessionTimeout': 600000,
+    'term': {
+        'termName': 'xterm',
+        'geometry': [80, 24],
+        'scrollback': 1000,
+        'visualBell': false,
+        'popOnBell': false,
+        'cursorBlink': false,
+        'screenKeys': false,
+        'colors': [
+            '#2e3436',
+            '#cc0000',
+            '#4e9a06',
+            '#c4a000',
+            '#3465a4',
+            '#75507b',
+            '#06989a',
+            '#d3d7cf',
+            '#555753',
+            '#ef2929',
+            '#8ae234',
+            '#fce94f',
+            '#729fcf',
+            '#ad7fa8',
+            '#34e2e2',
+            '#eeeeec'
+        ]
+    }
 };
