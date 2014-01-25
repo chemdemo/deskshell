@@ -9,6 +9,7 @@ var express = require('express');
 var sio = require('socket.io');
 var http = require('http');
 var path = require('path');
+var term = require('term.js');
 
 var conf = require('./config');
 var routes = require('./server/routes');
@@ -17,13 +18,29 @@ var app = express();
 var server = http.Server(app);
 var io = sio.listen(server);
 
+app.use(function(req, res, next) {
+    var setHeader = res.setHeader;
+
+    res.setHeader = function(name) {
+        switch (name) {
+            case 'Cache-Control':
+            case 'Last-Modified':
+            case 'ETag':
+            return;
+        }
+        return setHeader.apply(res, arguments);
+    };
+
+    next();
+});
+
+app.use(term.middleware());
+
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-// app.use(express.cookieParser(settings.COOKIE_SECRET));
+// app.use(express.cookieParser(conf.cookieSecret));
 app.use(app.router);
-
-routes(app);
 
 app.configure('development', function() {
     app.use(express.static(path.resolve(__dirname, 'client/dev')));
@@ -31,7 +48,7 @@ app.configure('development', function() {
 
 app.configure('production', function() {
     var p = path.resolve(__dirname, 'client/build');
-    app.use(express.static(p, {maxAge: conf.MAXAGE}));
+    app.use(express.static(p, {maxAge: conf.maxAge}));
 });
 
 io.configure('procuction', function() {
@@ -51,10 +68,12 @@ io.configure('development', function() {
     io.set('transports', ['websocket']);
 });
 
-io.of('/cmd').on('connection', function(socket) {
-    socket.on('message', function(data) {
-        console.log(data);
-    });
+routes(app, io);
+
+// 404 || 50x
+app.use(function(err, req, res) {
+    if(err.status === 404) res.send('Page not found!');
+    else res.send('Server error!');
 });
 
-server.listen(conf.SYS_PORT, conf.SYS_HOST);
+server.listen(conf.port || 8090, conf.host || 'localhost');

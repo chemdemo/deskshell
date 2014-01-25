@@ -142,3 +142,18 @@ div[contenteditable=true] {
     background-image: -o-linear-gradient(top, $from, $center, $to);
     background-image: inear-gradient(top, $from, $center, $to);
 }
+
+.loading {
+    background: url(/images/loading.gif) no-repeat 10% 50%;
+    width: 200px;
+    padding: 15px 0;
+    text-indent: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -80px;
+    margin-top: -25px;
+    border: 1px solid #DDD;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.1);
+    background-color: #FBFFF9;
+}

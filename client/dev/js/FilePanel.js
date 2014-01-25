@@ -5,55 +5,21 @@
 
 'use strict';
 
-module.exports = function() {
-    var createSocket = function() {
-        var socket = io.connect('/cmd');
-        socket.on('connect', function(data) {
-            socket.send('client connected!');
+var tmpl = require('./tmpl')['Tmpl'];
+var _proto = FilePanel.prototype;
 
-            socket.on('message', function(msg) {
-                console.log(msg);
-            });
+function FilePanel(elId, data, settings) {
+    if(!(this instanceof FilePanel)) return new FilePanel(elId, data, settings);
 
-            document.addEventListener('click', function() {
-                socket.send('clicked!');
-            });
-        });
-    };
-
-    document.querySelector('#btn').addEventListener('click', createSocket);
-
-    var stuff = document.querySelector('#stuff');
-    var box = document.querySelector('#box');
-
-    // stuff.addEventListener('selectstart', function(e) {
-    //     e.preventDefault();
-    // });
-
-    stuff.addEventListener('dragstart', function(e) {
-        this.classList.add('dragstart');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text', Math.random());
-        e.dataTransfer.setDragImage(e.target, 0, 0);
-    });
-
-    stuff.addEventListener('dragend', function(e) {
-        this.classList.remove('dragstart');
-    });
-
-    box.addEventListener('dragover', function(e) {
-        e.preventDefault();
-    });
-
-    box.addEventListener('dragenter', function(e) {
-        e.preventDefault();
-        this.classList.add('active');
-    });
-
-    box.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.classList.remove('active');
-        // console.log(e.dataTransfer.getData('text'));
-        console.log(e.dataTransfer.files[0]);
-    });
+    this.init(elId, data, settings);
 };
+
+_proto.init = function(elId, data, settings) {
+    $(elId).html(tmpl['fileList']({list: data}));
+};
+
+_proto.setContent = function() {
+    ;
+};
+
+module.exports = FilePanel;

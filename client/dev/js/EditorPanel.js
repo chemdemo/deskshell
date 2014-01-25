@@ -3,42 +3,46 @@
  * Copyright (c) 2013-2014, dmyang<yangdemo@gmail.com> (MIT License)
  */
 
-var util = require('util');
-var EventEmitter = require('events').EventEmitter;
 var _proto = EditorPanel.prototype;
 
-function EditorPanel() {
-    if(!(this instanceof EditorPanel)) return new EditorPanel();
+function EditorPanel(elId, data, settings) {
+    if(!(this instanceof EditorPanel)) return new EditorPanel(elId, data, settings);
 
-    EventEmitter.prototype.call(this);
-
-    this.prefix = 'editor';
-    this.editors = [];
-    this.defaultSettings = {
-        theme: 'monokai'
-    };
+    this.init(elId, data, settings);
 };
 
-util.inherits(EditorPanel, EventEmitter);
-
-_proto.add = function(elId, settings) {
+_proto.init = function(elId, data, settings) {
     if(!elId) throw Error('Element id is required.');
 
-    var editor = ace.edit(elId);
-    var session = editor.getSession();
+    this.elId = elId;
 
-    settings = $.extend(this.defaultSettings, settings || {});
+    var editor = this.editor = ace.edit(elId);
+    var session = this.session = editor.getSession();
 
     editor.setShowPrintMargin(false);
     // editor.setHighlightActiveLine(false);
     editor.setShowPrintMargin(false);
     editor.setAutoScrollEditorIntoView();
-    editor.setTheme('ace/theme/' + settings.theme);
-    settings.mode && session.setMode('ace/mode/' + settings.mode);
-    settings.value && editor.setValue(settings.value);
+    this.setTheme(settings.theme);
+    settings.mode && this.setMode(settings.mode);
     // session.setUseWrapMode(true);
+    this.setValue(data || '');
+};
+
+_proto.setTheme = function(theme) {
+    this.editor.setTheme('ace/theme/' + theme);
+};
+
+_proto.setMode = function(mode) {
+    this.session.setTheme('ace/mode/' + mode);
+};
+
+_proto.setValue = function(value) {
+    this.editor.setValue(value);
 };
 
 _proto.destroy = function() {
     ;
 };
+
+module.exports = EditorPanel;
