@@ -45,5 +45,6 @@ module.exports = {
             '#34e2e2',
             '#eeeeec'
         ]
-    }
+    },
+    'debug': false
 };

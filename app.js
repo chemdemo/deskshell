@@ -13,6 +13,7 @@ var term = require('term.js');
 
 var conf = require('./config');
 var routes = require('./server/routes');
+var user = require('./server/controller').user;
 
 var app = express();
 var server = http.Server(app);
@@ -33,6 +34,8 @@ app.use(function(req, res, next) {
 
     next();
 });
+
+app.use(user.auth);
 
 app.use(term.middleware());
 
@@ -62,6 +65,8 @@ io.configure('procuction', function() {
         , 'xhr-polling'
         , 'jsonp-polling'
     ]);
+
+    io.set('authorization', user.wsAuth);
 });
 
 io.configure('development', function() {

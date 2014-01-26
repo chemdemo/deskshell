@@ -1,20 +1,46 @@
 'use strict';
 
+var express = require('express');
 var conf = require('../../config');
+var helper = require('../helper');
+var logger = helper.logger;
 
-var users = exports.passed = {};
+var users = conf.users;
+var hashed = exports.hashed = {};
 
-exports.auth = function(req, res, next) {
-    var name = req.params.name || req.query.name || '';
-    var pass = req.params.pass || req.query.pass || '';
+var auth = exports.auth = function() {
+    if (!Object.keys(users).length) {
+        logger.warn('It\'s dangerous while anyone can access with no authorization.');
+        return function(req, res, next) {
+            next();
+        };
+    }
 
-    if(!name || !pass) return next('Authorization failed.');
+    Object.keys(users).forEach(function(k) {
+        var name = helper.hashed(k) ? k : helper.sha1(k);
+        var pass = helper.hashed(users[k]) ? users[k] : helper.sha1(users[k]);
 
-    if(!Object.hasOwnProperty.call(conf, name)) return next('Has no permission to access.');
+        hashed[name] = pass;
+    });
 
-    if(conf.name !== pass) return next('Authorization failed.');
+    // app.use(express.basicAuth(callback))
+    return express.basicAuth(function(user, pass, done) {
+        var name = helper.sha1(user);
+        var passwd = helper.sha1(pass);
 
-    if(!users.name) users[name] = {pass: pass, terms: {}};
+        if (!Object.hasOwnProperty.call(hashed, name)) return done('Has no permission to access.');
 
-    next();
+        if(passwd !== hashed[name]) return done('Authorization failed.');
+
+        done(null, user);
+    });
+}();
+
+// hsData(handshakeData) => socket request object
+exports.wsAuth = function(hsData, next) {
+    hsData.__proto__ = Stream.prototype;
+    auth(hsData, null, function(err) {
+        hsData.user = hsData.remoteUser || hsData.user;
+        next(err);
+    });
 };
