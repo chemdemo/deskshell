@@ -8,10 +8,23 @@ var helper = require('../helper');
 var logger = helper.logger;
 
 var users = conf.users;
-var terms = [];
 
-function handleMsg(msg) {
-    logger.log(msg);
+var sessions = exports.sessions = {};
+
+exports.handleTermConnection = function(socket) {
+    socket.on('message', handleMsg.bind(socket));
+
+    socket.on('create', termSessions.handleCreate.bind(socket));
+    socket.on('data', termSessions.handleData.bind(socket));
+    socket.on('kill', termSessions.handleKill.bind(socket));
+    socket.on('resize', termSessions.handleResize.bind(socket));
+    socket.on('process', termSessions.handleProcess.bind(socket));
+    socket.on('disconnect', termSessions.handleDisconnect.bind(socket));
+    socket.on('request-paste', termSessions.handlePaste.bind(socket));
+};
+
+exports.handleFsConnection = function(socket) {
+    socket.on('message', handleMsg.bind(socket));
 };
 
 var termSessions = function() {
@@ -70,30 +83,3 @@ var termSessions = function() {
         }
     }
 }();
-
-var TermSession = function(socket) {
-    this.socket = socket;
-    this.terms = {};
-    this.req = socket.handshake;
-};
-
-var FsSession = function(socket) {
-    ;
-};
-
-module.exports = {
-    handleTermConnection: function(socket) {
-        socket.on('message', handleMsg.bind(socket));
-
-        socket.on('create', termSessions.handleCreate.bind(socket));
-        socket.on('data', termSessions.handleData.bind(socket));
-        socket.on('kill', termSessions.handleKill.bind(socket));
-        socket.on('resize', termSessions.handleResize.bind(socket));
-        socket.on('process', termSessions.handleProcess.bind(socket));
-        socket.on('disconnect', termSessions.handleDisconnect.bind(socket));
-        socket.on('request-paste', termSessions.handlePaste.bind(socket));
-    },
-    handleFsConnection: function(socket) {
-        socket.on('message', handleMsg.bind(socket));
-    }
-};
