@@ -9,8 +9,7 @@
     "express": "3.0.6",
     "socket.io": "*",
     "underscore": "~1.5.2",
-    "term.js": "0.0.3",
-    "pty.js": "~0.2.3"
+    "term.js": "0.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

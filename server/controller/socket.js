@@ -1,85 +1,37 @@
 'use strict';
 
 var fs = require('fs');
-var pty = require('pty.js');
 var user = require('./user');
 var conf = require('../../config');
 var helper = require('../helper');
 var logger = helper.logger;
+var TermSession = require('./TermSession');
+var FsSession = require('./FsSession');
 
 var users = conf.users;
 
 var sessions = exports.sessions = {};
 
 exports.handleTermConnection = function(socket) {
-    socket.on('message', handleMsg.bind(socket));
+    var session = TermSession(socket);
 
-    socket.on('create', termSessions.handleCreate.bind(socket));
-    socket.on('data', termSessions.handleData.bind(socket));
-    socket.on('kill', termSessions.handleKill.bind(socket));
-    socket.on('resize', termSessions.handleResize.bind(socket));
-    socket.on('process', termSessions.handleProcess.bind(socket));
-    socket.on('disconnect', termSessions.handleDisconnect.bind(socket));
-    socket.on('request-paste', termSessions.handlePaste.bind(socket));
+    socket.on('message', session.msgHandle);
+    socket.on('create', session.createHandle);
+    socket.on('data', session.dataHandle);
+    socket.on('kill', session.killHandle);
+    socket.on('resize', session.resizeHandle);
+    // socket.on('process', session.processHandle);
+    socket.on('disconnect', session.disconnectHandle);
+    socket.on('request-paste', session.pasteHandle);
 };
 
 exports.handleFsConnection = function(socket) {
-    socket.on('message', handleMsg.bind(socket));
+    var session = FsSession(socket);
+
+    socket.on('message', session.msgHandle);
+    socket.on('read-path', session.readpathHandle);
+    socket.on('move-path', session.movepathHandle);
+    socket.on('rm-path', session.rmpathHandle);
+    socket.on('create-path', session.createpathHandle);
+    socket.on('write-path', session.writepathHandle);
 };
-
-var termSessions = function() {
-    return {
-        handleCreate: function(cols, rows, callback) {
-            var socket = this;
-            var user = socket.handshake.user;
-            var userTerms = users[user] ? users[user] : users[user] = [];
-
-            if(userTerms.length > conf.limitPerUser) {
-                logger.warn('Terminal limited.');
-                // return callback(new Error('Terminal limited.'));
-                return socket.emit('term-create', {err: new Error('Terminal limited.')});
-            }
-
-            var term = pty.fork(conf.shell, shellArgs, {
-                name: conf.term.termName,
-                cols: cols,
-                rows: rows,
-                cwd: conf.cwd || process.env.HOME
-            });
-            var id = term.pty;
-
-            term.on('data', function(data) {
-                socket.emit('data', id, data);
-            });
-
-            term.on('close', function() {
-                socket.emit('kill', id);
-                delete terms[id];
-                logger.log('Closed pty (%s): %d.', term.pty, term.fd);
-            });
-
-            userTerms.push(id);
-            terms[id] = term;
-
-            socket.emit('term-create', {err: null, id: id, pty: term.pty});
-        },
-        handleData: function(id, data) {
-            ;
-        },
-        handleKill: function() {
-            ;
-        },
-        handleResize: function() {
-            ;
-        },
-        handleProcess: function() {
-            ;
-        },
-        handleDisconnect: function() {
-            ;
-        },
-        handlePaste: function() {
-            ;
-        }
-    }
-}();

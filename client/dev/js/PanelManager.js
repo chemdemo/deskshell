@@ -6,9 +6,8 @@
 var helper = require('./helper');
 var FilePanel = require('./FilePanel');
 var EditorPanel = require('./EditorPanel');
-var _proto = PanelManager.prototype;
 
-function PanelManager() {
+var PanelManager = module.exports = function() {
     if(!(this instanceof PanelManager)) return new PanelManager();
 
     this.panelNav = $('#panels-tab-nav');
@@ -24,6 +23,8 @@ function PanelManager() {
 
     this.bind();
 };
+
+var _proto = PanelManager.prototype;
 
 _proto.bind = function() {
     var self = this;
@@ -89,7 +90,7 @@ _proto.add = function(options) {
         </li>';
     var contentStr = '<div class="' + (type === 'files' ? 'file-list' : 'ace-editor')\
             + ' tab-pane" id="' + contentId + '">\
-            <div class="loading">正在努力加载中。。。</div>\
+            <div class="loading">loading...</div>\
         </div>';
     var tabs = this.panelNav.find('> li');
     var prevTab = this.panelNav.find('li:eq(' + (index - 1) + ')');

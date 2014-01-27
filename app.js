@@ -20,17 +20,19 @@ var server = http.Server(app);
 var io = sio.listen(server);
 
 app.use(function(req, res, next) {
-    var setHeader = res.setHeader;
+    if(req.url.match(/term|fs/)) {
+        var setHeader = res.setHeader;
 
-    res.setHeader = function(name) {
-        switch (name) {
-            case 'Cache-Control':
-            case 'Last-Modified':
-            case 'ETag':
-            return;
-        }
-        return setHeader.apply(res, arguments);
-    };
+        res.setHeader = function(name) {
+            switch (name) {
+                case 'Cache-Control':
+                case 'Last-Modified':
+                case 'ETag':
+                return;
+            }
+            return setHeader.apply(res, arguments);
+        };
+    }
 
     next();
 });
@@ -53,6 +55,8 @@ app.configure('production', function() {
     var p = path.resolve(__dirname, 'client/build');
     app.use(express.static(p, {maxAge: conf.maxAge}));
 });
+
+app.use(express.static(path.resolve(__dirname, 'client/shared')));
 
 io.configure('procuction', function() {
     io.enable('browser client etag');

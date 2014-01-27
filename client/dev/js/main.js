@@ -11,10 +11,10 @@ var ui = require('./ui');
 var tmpl = require('./tmpl')['Tmpl'];
 var mock = require('./mock_data');
 
-var socket = io.connect('/ws');
+// var socket = io.connect('/ws');
 
-socket.on('connect', function() {
-    ;
-});
+// socket.on('connect', function() {
+//     ;
+// });
 
 // $('#files').html(tmpl['fileList']({list: mock.fileList}));

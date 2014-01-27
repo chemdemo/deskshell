@@ -1,8 +1,9 @@
 'use strict';
 
 var fs = require('fs');
-var config = require('../../config');
-var ctrl = require('../controller');
+var path = require('path');
+var config = require('../config');
+var ctrl = require('./controller');
 
 module.exports = function(app, io) {
     app.get('/', function(req, res, next) {

@@ -71,21 +71,34 @@
                 </li>
                 <li>
                     <a href="#editor" data-toggle="tab">Profile</a>
-                    <i class="glyphicon glyphicon-remove" title="close"></i>
+                    <i class="glyphicon glyphicon-remove close-tab" title="close"></i>
                 </li>
             </ul>
 
             <div class="tab-content" id="panels-tab-content">
-                <div class="file-list tab-pane active" id="files"><div class="loading">正在努力加载中。。。</div></div>
-                <div class="ace-editor tab-pane" id="editor"><div class="loading">正在努力加载中。。。</div></div>
+                <div class="file-list tab-pane active" id="files"><div class="loading">loading...</div></div>
+                <div class="ace-editor tab-pane" id="editor"><div class="loading">loading...</div></div>
             </div>
         </div>
     </div>
 
-    <div id="console" class="console"></div>
+    <div id="terms" class="terms">
+        <div class="terms-nav">
+            <ul class="nav nav-tabs" id="terms-tab-nav">
+                <li class="active">
+                    <a href="#term-1" data-toggle="tab">term-1</a>
+                    <i class="glyphicon glyphicon-remove close-tab" title="close"></i>
+                </li>
+            </ul>
+            <i class="glyphicon glyphicon-plus term-plus"></i>
+        </div>
+        <div class="tab-content" id="terms-tab-content">
+            <div class="tab-pane active term" id="term-1"></div>
+        </div>
+    </div>
 <script src="/js/libs.min.js"></script>
-<script src="/js/ace-noconflict-min/ace.js"></script>
-<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script src="/ace/ace.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script src="/js/main.min.js?_t=@@timestamp"></script>
 </body>
 </html>

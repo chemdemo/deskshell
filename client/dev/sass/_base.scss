@@ -11,7 +11,8 @@ body, button, select, textarea, input {
     word-wrap: break-word;
 }
 
-html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6,
+pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
     margin: 0;
     padding: 0;
 }
@@ -145,15 +146,40 @@ div[contenteditable=true] {
 
 .loading {
     background: url(/images/loading.gif) no-repeat 10% 50%;
-    width: 200px;
-    padding: 15px 0;
-    text-indent: 60px;
+    width: 112px;
+    padding: 10px 0;
+    text-indent: 50px;
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-left: -80px;
-    margin-top: -25px;
+    margin-left: -56px;
+    margin-top: -20px;
     border: 1px solid #DDD;
     box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.1);
     background-color: #FBFFF9;
+}
+
+.nav-tabs {
+    /*border-color: #FAEBCC;*/
+    /*border-color: #E0E0E0;*/
+    > li > a {
+        border-radius: 0;
+        padding: 5px 15px;
+    }
+    .close-tab {
+        cursor: pointer;
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        right: 2px;
+        top: 0px;
+        color: #666;
+        display: none;
+        @include scale(0.7, 0.7);
+    }
+    .active .close-tab,
+    li:hover .close-tab {
+        display: block;
+    }
 }
