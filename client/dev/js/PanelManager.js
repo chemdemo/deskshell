@@ -3,6 +3,8 @@
  * Copyright (c) 2013-2014, dmyang<yangdemo@gmail.com> (MIT License)
  */
 
+'use strict';
+
 var helper = require('./helper');
 var FilePanel = require('./FilePanel');
 var EditorPanel = require('./EditorPanel');

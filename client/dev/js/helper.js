@@ -3,6 +3,8 @@
  * Copyright (c) 2013-2014, dmyang<yangdemo@gmail.com> (MIT License)
  */
 
+'use strict';
+
 exports.uuid = function uuid(len, radix) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     var uuid = [], i;
