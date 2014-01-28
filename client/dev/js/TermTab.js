@@ -34,7 +34,7 @@ var TermTab = module.exports = function(options) {
         self.pty = data.pty;
         self.id = data.id;
         self.setProcess(data.process);
-        self.emit('open');
+        self.emit('open', self.elId);
     });
 };
 
@@ -49,19 +49,19 @@ _proto.handler = function(data) {
 _proto.setProcess = function(name) {
     name = sanitize(name);
 
-    this.emit('process', name);
+    this.process = name;
 
-    // $('#nav-' + this.elId).attr('title', name);
+    this.emit('process', this.elId);
 };
 
 var _focus = _proto.focus;
 _proto.focus = function() {
-    this.emit('focus');
+    this.emit('focus', this.elId);
     _focus();
 };
 
 var _destroy = this.destroy;
 _proto.destroy = function() {
-    this.emit('destroy');
+    this.emit('destroy', this.elId);
     _destroy();
 };

@@ -29,8 +29,8 @@ _proto.bind = function() {
     // dom events bind...
     // add()
     // remove()
-    // el.on('click', this.add)
-    // el2.on('click', this.remove)
+    // add.on('click', this.add)
+    // close.on('click', this.remove)
 };
 
 _proto.add = function() {
@@ -55,10 +55,28 @@ _proto.add = function() {
 
     this.terms[elId] = term;
 
-    term.on('open', this.open.bind(this, term));
-    term.on('focus', this.focus.bind(this, term));
-    term.on('process', this.process.bind(this, term));
-    term.on('destroy', this.remove.bind(this, term));
+    term.on('open', this.open.bind(this, elId));
+    term.on('focus', this.focus.bind(this, elId));
+    term.on('process', this.process.bind(this, elId));
+    term.on('destroy', this.destroy.bind(this, elId));
+};
+
+_proto.open = function(elId) {
+    ;
+};
+
+_proto.focus = function(elId) {
+    ;
+};
+
+_proto.process = function(elId) {
+    var term = this.terms[elId];
+
+    $('#nav-' + elId).attr('title', term.process);
+};
+
+_proto.destroy = function(elId) {
+    ;
 };
 
 _proto.remove = function(elId) {
