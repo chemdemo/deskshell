@@ -11,10 +11,11 @@ var on = Terminal.on;
 var off = Terminal.off;
 var cancel = Terminal.cancel;
 
-var TermTab = module.exports = function(options) {
-    if(!(this instanceof TermTab)) return new TermTab(options);
+var TermTab = module.exports = function(mgr, options) {
+    if(!(this instanceof TermTab)) return new TermTab(mgr, options);
 
     var self = this;
+    var mgr = this.mgr = mgr;
     var cols = options.cols;
     var rows = options.rows;
 
@@ -28,13 +29,17 @@ var TermTab = module.exports = function(options) {
     this.open(document.getElementById('#term-' + this.elId));
     this.focused = true;
 
+    this.on('open', this.open);
+    this.on('focus', this.focus);
+    this.on('process', this.setProcess);
+
     this.socket.emit('create', cols, rows, function(err, data) {
         if(err) return self.destroy();
 
         self.pty = data.pty;
         self.id = data.id;
         self.setProcess(data.process);
-        self.emit('open', self.elId);
+        self.emit('open');
     });
 };
 
@@ -46,22 +51,27 @@ _proto.handler = function(data) {
     this.socket.emit('data', this.id, data);
 };
 
+_proto.open = function() {
+    this.mgr.emit('open', this.elId);
+};
+
 _proto.setProcess = function(name) {
     name = sanitize(name);
 
     this.process = name;
 
-    this.emit('process', this.elId);
+    // this.emit('process', this.elId);
+    $('#nav-' + this.elId).attr('title', name);
 };
 
 var _focus = _proto.focus;
 _proto.focus = function() {
-    this.emit('focus', this.elId);
+    this.mgr.emit('focus', this.elId);
     _focus();
 };
 
-var _destroy = this.destroy;
-_proto.destroy = function() {
-    this.emit('destroy', this.elId);
-    _destroy();
-};
+// var _destroy = this.destroy;
+// _proto.destroy = function() {
+//     this.mgr.emit('destroy', this.elId);
+//     _destroy();
+// };

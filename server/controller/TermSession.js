@@ -2,7 +2,7 @@
 
 // see => https://github.com/chjj/tty.js
 
-// var pty = require('pty.js');
+var pty = require('pty.js');
 var Session = require('./Session');
 var sessions = require('./socket').sessions;
 var execFile = require('child_process').execFile;
@@ -17,14 +17,14 @@ var _proto = TermSession.prototype;
 
 _proto.__proto__ = Session.prototype;
 
-_proto.createHandle = function(cols, rows) {
+_proto.createHandle = function(cols, rows, callback) {
     var socket = this.socket;
     var user = socket.handshake.user;
     var terms = this.terms;
 
     if(Object.keys(terms).length >= conf.limitPerUser) {
         logger.warn('Terminal limited.');
-        return socket.emit('term-create', {err: new Error('Terminal limited.')});
+        return callback(new Error('Terminal limited.'));
     }
 
     var term = pty.fork(conf.shell, conf.shellArgs, {
@@ -49,7 +49,7 @@ _proto.createHandle = function(cols, rows) {
 
     logger.log('Created pty (id: %d, master: %d, pid: %d).', id, term.fd, term.pid);
 
-    socket.emit('term-created', {err: null, id: id, pty: term.pty});
+    callback(null, {id: id, pty: term.pty});
 };
 
 _proto.dataHandle = function(id, data) {
