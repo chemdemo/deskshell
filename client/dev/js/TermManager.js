@@ -118,8 +118,8 @@ _proto.switch = function(currId) {
 
     for(var i=0; i<len; i++) {
         if(els[i].id === '#nav-' + currId) {
-            if(i === 0) return _select(p.find('> li:eq(' + (i + 1 ) + ')'));
-            else return _select(p.find('> li:eq(' + (i - 1 ) + ')'));
+            if(i === 0) return _select(p.find('> li:eq(' + (i + 1) + ')'));
+            else return _select(p.find('> li:eq(' + (i - 1) + ')'));
         }
     }
 };
