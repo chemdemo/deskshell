@@ -2,38 +2,46 @@
 
 // see => https://github.com/chjj/tty.js
 
+var util = require('util');
 var pty = require('pty.js');
 var Session = require('./Session');
-var sessions = require('./socket').sessions;
 var execFile = require('child_process').execFile;
+var conf = require('../../config');
+var helper = require('../helper');
+var logger = helper.logger;
 
 var TermSession = module.exports = function(socket) {
     if(!(this instanceof TermSession)) return new TermSession(socket);
 
+    Session.call(this, socket);
     this.terms = {};
 };
 
+util.inherits(TermSession, Session);
+
 var _proto = TermSession.prototype;
 
-_proto.__proto__ = Session.prototype;
-
-_proto.createHandle = function(cols, rows, callback) {
+_proto.createHandle = function(id, cols, rows, callback) {
     var socket = this.socket;
     var user = socket.handshake.user;
     var terms = this.terms;
+    var term;
 
     if(Object.keys(terms).length >= conf.limitPerUser) {
         logger.warn('Terminal limited.');
         return callback(new Error('Terminal limited.'));
     }
 
-    var term = pty.fork(conf.shell, conf.shellArgs, {
+    this.id = id;
+
+    term = pty.fork(conf.shell, conf.shellArgs || [], {
         name: conf.term.termName,
         cols: cols,
         rows: rows,
         cwd: conf.cwd || process.env.HOME
     });
-    var id = term.pty;
+
+    term.pty = id;
 
     term.on('data', function(data) {
         socket.emit('data', id, data);
@@ -46,8 +54,9 @@ _proto.createHandle = function(cols, rows, callback) {
     });
 
     terms[id] = term;
+    if(!Session.sessions[id]) Session.sessions[id] = this;
 
-    logger.log('Created pty (id: %d, master: %d, pid: %d).', id, term.fd, term.pid);
+    logger.log('Created pty (id: %s, master: %d, pid: %d).', id, term.fd, term.pid);
 
     callback(null, {id: id, pty: term.pty});
 };
@@ -64,16 +73,20 @@ _proto.dataHandle = function(id, data) {
 
 _proto.killHandle = function(id) {
     var terms = this.terms;
+    var term = terms[id];
 
-    if(terms[id]) {
-        terms[id].destroy();
+    if(term) {
+        term.destroy();
         delete terms[id];
+        logger.log('term [%s] has killed.', id);
     }
 };
 
 _proto.resizeHandle = function(id, cols, rows) {
     var terms = this.terms;
-    !!terms[id] && terms[id].resize(cols, rows);
+    var term = terms[id];
+
+    !!term && term.resize(cols, rows);
 };
 
 _proto.disconnectHandle = function() {
@@ -84,8 +97,8 @@ _proto.disconnectHandle = function() {
 
     while(i--) {
         term = terms[keys[i]];
-        term = null;
         term.destroy();
+        term = null;
     }
 
     if(sessions[this.id]) sessions[this.id] = null;

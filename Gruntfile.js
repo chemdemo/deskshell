@@ -247,7 +247,7 @@ module.exports = function(grunt) {
         // minify css and copy
         grunt.task.run('compass:dist');
         // minify images
-        // grunt.task.run('imagemin');
+        grunt.task.run('imagemin');
         // minify fonts & css
         grunt.task.run('copy');
         // update image name by the md5 value

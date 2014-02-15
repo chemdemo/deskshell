@@ -6,7 +6,7 @@
 'use strict';
 
 var EventEmitter = Terminal.EventEmitter;
-var inherits = EventEmitter.inherits;
+var inherits = Terminal.inherits;
 var TermTab = require('./TermTab');
 var helper = require('./helper');
 
@@ -20,20 +20,15 @@ var TermManager = module.exports = function() {
     var self = this;
     var socket = this.socket = io.connect('/term');
 
-    this.on('open', function(elId) {
-        // term created!
-        helper.log('Term [%d] opened.', elId);
-        $('#term-' + elId).removeClass('none');
-        $('#nav-' + elId).removeClass('none').trigger('click');
-    });
-
-    this.on('focus', function(elId) {
-        // $('#nav-' + elId).removeClass('none');
-        // reconnect ...
-    });
-
     socket.on('connect', function() {
+        console.log('Term socket connected.');
         self.bind();
+    });
+
+    socket.on('data', function(id, data) {
+        var term = self.terms[id];
+
+        term.write(data);
     });
 };
 
@@ -45,7 +40,7 @@ _proto.bind = function() {
     var self = this;
     var terms = this.terms;
 
-    $('#term-plus').on('click', this.add);
+    $('#term-plus').on('click', this.add.bind(this));
 
     this.termNav.on('click', '> li > a', function(e) {
         e.preventDefault();
@@ -56,70 +51,95 @@ _proto.bind = function() {
         if(self.hasClass('active')) return;
 
         id = self.attr('href').replace(/#term-/, '');
-        Terminal.focus.focused = false;
         terms[id].emit('focus');
         self.tab('show');
     });
 
     this.termNav.on('click', '.close-tab', function(e) {
         var p = $(this).parent();
-        self.remove(p.attr('id').replace(/#nav-/, ''));
+        var id = p.attr('id').replace(/nav-/, '');
+
+        self.remove.call(self, id);
     });
 };
 
 _proto.add = function(e) {
     var self = this;
-    var elId = helper.uuid();
+    var id = helper.uuid(6);
     var socket = this.socket;
-    var termNav = $('<li id="nav-' + elId + '" class="none">\
-            <a href="#term-' + elId + '" data-toggle="tab">term-' + elId + '</a>\
+    var termNav = $('<li id="nav-' + id + '" class="none">\
+            <a href="#term-' + id + '" data-toggle="tab">term-' + id + '</a>\
             <i class="glyphicon glyphicon-remove close-tab" title="close"></i>\
         </li>');
-    var termContent = $('<div class="tab-pane term none" id="term-"' + elId + '></div>');
+    var termContent = $('<div class="tab-pane term none" id="term-' + id + '"></div>');
+    var actived = this.termNav.find('.active');
     var term;
 
-    this.termNav.append(termNav);
+    actived.length ? termNav.insertAfter(actived) : this.termNav.append(termNav);
     this.termContent.append(termContent);
 
     term = new TermTab(this, {
-        socket: socket,
-        cols: 100,
-        rows: 30,
-        elId: elId
+        cols: 80,
+        rows: 8,
+        id: id
     });
 
-    this.terms[elId] = term;
+    term.on('open', function() {
+        // self.emit('open', id);
+        console.log('Term [%s] opened.', id);
+        $('#term-' + id).removeClass('none');
+        $('#nav-' + id).removeClass('none').trigger('click');
+        $('#nav-' + id).find('> a').trigger('click');
+    });
+    term.on('focus', function() {
+        console.log('Term [%s] focused!', id);
+        term.focus();
+        self.focusId = id;
+    });
+    term.on('destroy', this.remove.bind(this));
+    // term.on('process', term.setProcess);
+
+    this.terms[id] = term;
 };
 
-_proto.remove = function(elId) {
-    var term = this.terms[elId];
-    var nav = $('#nav-' + elId);
+_proto.remove = function(id) {
+    var term = this.terms[id];
+    var nav = $('#nav-' + id);
 
-    term.emit('destroy');
-    term = this.terms[elId] = null;
+    // term.emit('destroy');
+    term.destroy();
+    delete this.terms[id];
+    this.socket.emit('kill', id);
 
     // select previous one
-    if(term === Terminal.focus) this.switch(elId);
-    $('#nav-' + elId).remove();
+    if(id === this.focusId) {
+        this.authSelect(id);
+    } else {
+        $('#nav-' + id).remove();
+    }
 };
 
-_proto.switch = function(currId) {
+_proto.authSelect = function(startId) {
     var self = this;
     var p = this.termNav;
-    var el = $('#nav-' + currId);
+    var el = $('#nav-' + startId);
     var terms = this.terms;
+    var _remove = function() {
+        $('#nav-' + startId).remove();
+    };
     var _select = function(el) {
+        _remove();
         el.find('> a').trigger('click');
     };
-    var els = p[0].querySelectorAll('> li');
+    var els = p[0].querySelectorAll('li');
     var len = els.length;
 
-    if(!len || len < 2) return;
+    if(!len || len < 2) return _remove();
 
     for(var i=0; i<len; i++) {
-        if(els[i].id === '#nav-' + currId) {
-            if(i === 0) return _select(p.find('> li:eq(' + (i + 1) + ')'));
-            else return _select(p.find('> li:eq(' + (i - 1) + ')'));
+        if(els[i].id === 'nav-' + startId) {
+            if(i > 0) return _select(p.find('> li:eq(' + (i - 1) + ')'));
+            else return _select(p.find('> li:eq(' + (i + 1) + ')'));
         }
     }
 };

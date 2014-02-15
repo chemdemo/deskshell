@@ -10,11 +10,8 @@ var DeskShell = module.exports = {};
 var ui = require('./ui');
 var tmpl = require('./tmpl')['Tmpl'];
 var mock = require('./mock_data');
+var TermManager = require('./TermManager');
 
-// var socket = io.connect('/ws');
-
-// socket.on('connect', function() {
-//     ;
-// });
+new TermManager();
 
 // $('#files').html(tmpl['fileList']({list: mock.fileList}));

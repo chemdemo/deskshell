@@ -6,10 +6,11 @@
 'use strict';
 
 var EventEmitter = Terminal.EventEmitter;
-var inherits = EventEmitter.inherits;
+var inherits = Terminal.inherits;
 var on = Terminal.on;
 var off = Terminal.off;
 var cancel = Terminal.cancel;
+var helper = require('./helper');
 
 var TermTab = module.exports = function(mgr, options) {
     if(!(this instanceof TermTab)) return new TermTab(mgr, options);
@@ -24,54 +25,51 @@ var TermTab = module.exports = function(mgr, options) {
         rows: rows
     });
 
-    this.socket = options.socket;
-    this.elId = options.elId;
-    this.open(document.getElementById('#term-' + this.elId));
-    this.focused = true;
+    this.socket = mgr.socket;
+    this.id = options.id;
+    this.open(document.getElementById('term-' + this.id));
 
-    this.on('open', this.open);
-    this.on('focus', this.focus);
-    this.on('process', this.setProcess);
+    // this.on('open', this.openHandle);
+    // this.on('focus', this.focusHandle);
+    // this.on('process', this.setProcess);
 
-    this.socket.emit('create', cols, rows, function(err, data) {
-        if(err) return self.destroy();
+    this.socket.emit('create', this.id, cols, rows, function(err, data) {
+        if(err) return self.emit('destroy', self.id);
 
         self.pty = data.pty;
-        self.id = data.id;
         self.setProcess(data.process);
         self.emit('open');
     });
 };
 
-var _proto = TermTab.prototype;
-
 inherits(TermTab, Terminal);
+
+var _proto = TermTab.prototype;
 
 _proto.handler = function(data) {
     this.socket.emit('data', this.id, data);
 };
 
-_proto.open = function() {
-    this.mgr.emit('open', this.elId);
+_proto.openHandle = function() {
+    this.mgr.emit('open', this.id);
 };
 
 _proto.setProcess = function(name) {
-    name = sanitize(name);
+    name = helper.sanitize(name);
 
     this.process = name;
 
-    // this.emit('process', this.elId);
-    $('#nav-' + this.elId).attr('title', name);
+    // this.emit('process', this.id);
+    $('#nav-' + this.id).attr('title', name);
 };
 
-var _focus = _proto.focus;
-_proto.focus = function() {
-    this.mgr.emit('focus', this.elId);
-    _focus();
+_proto.focusHandle = function() {
+    this.mgr.emit('focus', this.id);
+    this.focus();
 };
 
 // var _destroy = this.destroy;
 // _proto.destroy = function() {
-//     this.mgr.emit('destroy', this.elId);
+//     this.mgr.emit('destroy', this.id);
 //     _destroy();
 // };

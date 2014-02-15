@@ -1,3 +1,4 @@
+@charset "utf-8";
 /* line 6, ../sass/_base.scss */
 body, button, select, textarea, input {
   /*font-family: Microsoft YaHei, Tahoma, SimSun, Verdana;*/
@@ -377,11 +378,27 @@ div[contenteditable=true] {
 }
 
 /* line 1, ../sass/_terms.scss */
-.terms-nav {
+.border_style, .terms .nav-tabs > li > a, .terms .nav-tabs > li.active > a {
+  border: none;
+  border-bottom: 1px solid transparent;
+  border-right: 1px solid #666;
+}
+
+/* line 7, ../sass/_terms.scss */
+.terms {
+  clear: both;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 174px;
+  /*background-color: #2C3238;*/
+  font: 14px/1.8 Consolas;
+}
+/* line 15, ../sass/_terms.scss */
+.terms .terms-nav {
   position: relative;
 }
-/* line 3, ../sass/_terms.scss */
-.terms-nav .term-plus {
+/* line 17, ../sass/_terms.scss */
+.terms .terms-nav .term-plus {
   position: absolute;
   color: #DDD;
   cursor: pointer;
@@ -391,27 +408,11 @@ div[contenteditable=true] {
   -o-transform: scale(0.8, 0.8);
   transform: scale(0.8, 0.8);
 }
-/* line 8, ../sass/_terms.scss */
-.terms-nav .term-plus:hover {
+/* line 22, ../sass/_terms.scss */
+.terms .terms-nav .term-plus:hover {
   color: #FFF;
 }
-
-/* line 14, ../sass/_terms.scss */
-.border_style, .terms .nav-tabs > li > a, .terms .nav-tabs > li.active > a {
-  border: none;
-  border-bottom: 1px solid transparent;
-  border-right: 1px solid #666;
-}
-
-/* line 20, ../sass/_terms.scss */
-.terms {
-  clear: both;
-  width: 100%;
-  margin: 0 auto;
-  min-height: 174px;
-  /*background-color: #2C3238;*/
-}
-/* line 27, ../sass/_terms.scss */
+/* line 28, ../sass/_terms.scss */
 .terms .nav-tabs {
   border-color: #383C3F;
   background-color: #191B1D;
@@ -420,7 +421,11 @@ div[contenteditable=true] {
       border: 1px solid #F2DEDE;
   }*/
 }
-/* line 30, ../sass/_terms.scss */
+/* line 31, ../sass/_terms.scss */
+.terms .nav-tabs > li {
+  margin-right: -2px;
+}
+/* line 34, ../sass/_terms.scss */
 .terms .nav-tabs > li > a {
   background-color: #4e5051;
   background-image: -moz-linear-gradient(top, #4e5051, #3c3e3f, #353638);
@@ -428,7 +433,7 @@ div[contenteditable=true] {
   background-image: -o-linear-gradient(top, #4e5051, #3c3e3f, #353638);
   background-image: inear-gradient(top, #4e5051, #3c3e3f, #353638);
 }
-/* line 38, ../sass/_terms.scss */
+/* line 42, ../sass/_terms.scss */
 .terms .nav-tabs > li.active > a {
   background-color: #4d4d4d;
   background-image: -moz-linear-gradient(top, #4d4d4d, #242424, #2a2e31);
@@ -437,11 +442,16 @@ div[contenteditable=true] {
   background-image: inear-gradient(top, #4d4d4d, #242424, #2a2e31);
   color: #FFF;
 }
-/* line 44, ../sass/_terms.scss */
+/* line 48, ../sass/_terms.scss */
 .terms .nav-tabs .close-tab:hover {
   color: #FFF;
 }
-/* line 50, ../sass/_terms.scss */
-.terms .tab-content {
-  background-color: #000;
+/* line 54, ../sass/_terms.scss */
+.terms .terms-content {
+  background-color: #222;
+}
+
+/* line 59, ../sass/_terms.scss */
+.terminal-cursor {
+  color: red !important;
 }

@@ -19,6 +19,9 @@ var app = express();
 var server = http.Server(app);
 var io = sio.listen(server);
 
+// all sessions
+global.sessions = {};
+
 app.use(function(req, res, next) {
     if(req.url.match(/term|fs/)) {
         var setHeader = res.setHeader;
@@ -80,7 +83,7 @@ io.configure('development', function() {
 routes(app, io);
 
 // 404 || 50x
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
     if(err.status === 404) res.send('Page not found!');
     else res.send('Server error!');
 });

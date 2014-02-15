@@ -4,14 +4,24 @@ var crypto = require('crypto');
 var conf = require('../config');
 
 exports.logger = function() {
-    var prop = console.constructor.prototype;
+    // it works in browser but not node!!
+    // var prop = console.constructor.prototype;
+    // var r = {};
+
+    // for(var k in prop) {
+    //     if(typeof prop[k] === 'function') {
+    //         r[k] = conf.debug ? console[k].bind(console) : function() {};
+    //     }
+    // }
+
+    // return r;
+
+    var props = ['debug', 'info', 'log', 'error', 'warn'];
     var r = {};
 
-    for(var k in prop) {
-        if(typeof prop[k] === 'function') {
-            r[k] = conf.debug ? console[k].bind(console) : function() {};
-        }
-    }
+    props.forEach(function(k) {
+        r[k] = conf.debug ? console[k] : function() {};
+    });
 
     return r;
 }();

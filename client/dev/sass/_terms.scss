@@ -1,16 +1,3 @@
-.terms-nav {
-    position: relative;
-    .term-plus {
-        position: absolute;
-        color: #DDD;
-        cursor: pointer;
-        @include scale(0.8, 0.8);
-        &:hover {
-            color: #FFF;
-        }
-    }
-}
-
 .border_style {
     border: none;
     border-bottom: 1px solid transparent;
@@ -23,10 +10,27 @@
     margin: 0 auto;
     min-height: 174px;
     /*background-color: #2C3238;*/
+    font: 14px/1.8 Consolas;
+
+    .terms-nav {
+        position: relative;
+        .term-plus {
+            position: absolute;
+            color: #DDD;
+            cursor: pointer;
+            @include scale(0.8, 0.8);
+            &:hover {
+                color: #FFF;
+            }
+        }
+    }
 
     .nav-tabs {
         border-color: #383C3F;
         background-color: #191B1D;
+        > li {
+            margin-right: -2px;
+        }
         > li > a {
             @include gradient(#4E5051, #3C3E3F, #353638);
             @extend .border_style;
@@ -47,9 +51,11 @@
         }
     }
 
-    .tab-content {
-        background-color: #000;
+    .terms-content {
+        background-color: #222;
     }
 }
 
-
+.terminal-cursor {
+    color: red !important;
+}

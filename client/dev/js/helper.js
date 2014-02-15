@@ -26,5 +26,10 @@ exports.uuid = function uuid(len, radix) {
         }
     }
 
-    return uuid.join('');
+    return uuid.join('').toLowerCase();
+};
+
+exports.sanitize = function(s) {
+    if(!s) return '';
+    return (s + '').replace(/[&<>]/g, '');
 };

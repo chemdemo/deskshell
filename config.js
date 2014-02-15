@@ -16,8 +16,8 @@ module.exports = {
         'cert': './server/ca.crt'
     },
     'shell': 'sh',
-    'cwd': '/root',
-    'limitPerUser': 10,
+    'cwd': '/',
+    'limitPerUser': 5,
     'sessionTimeout': 600000,
     'term': {
         'termName': 'xterm',
@@ -25,7 +25,7 @@ module.exports = {
         'scrollback': 1000,
         'visualBell': false,
         'popOnBell': false,
-        'cursorBlink': false,
+        'cursorBlink': true,
         'screenKeys': false,
         'colors': [
             '#2e3436',
@@ -46,5 +46,5 @@ module.exports = {
             '#eeeeec'
         ]
     },
-    'debug': false
+    'debug': true
 };

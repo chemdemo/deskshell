@@ -10,19 +10,19 @@ var FsSession = require('./FsSession');
 
 var users = conf.users;
 
-var sessions = exports.sessions = {};
+// var sessions = exports.sessions = {};
 
 exports.handleTermConnection = function(socket) {
-    var session = TermSession(socket);
+    var session = new TermSession(socket);
 
-    socket.on('message', session.msgHandle);
-    socket.on('create', session.createHandle);
-    socket.on('data', session.dataHandle);
-    socket.on('kill', session.killHandle);
-    socket.on('resize', session.resizeHandle);
+    socket.on('message', session.msgHandle.bind(session));
+    socket.on('create', session.createHandle.bind(session));
+    socket.on('data', session.dataHandle.bind(session));
+    socket.on('kill', session.killHandle.bind(session));
+    socket.on('resize', session.resizeHandle.bind(session));
     // socket.on('process', session.processHandle);
-    socket.on('disconnect', session.disconnectHandle);
-    socket.on('request-paste', session.pasteHandle);
+    socket.on('disconnect', session.disconnectHandle.bind(session));
+    socket.on('request-paste', session.pasteHandle.bind(session));
 };
 
 exports.handleFsConnection = function(socket) {

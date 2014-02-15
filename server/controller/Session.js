@@ -4,7 +4,7 @@ var conf = require('../../config');
 var users = conf.users;
 var helper = require('../helper');
 var logger = helper.logger;
-var sessions = require('./socket').sessions;
+// var sessions = require('./sessions');
 
 var Session = module.exports = function(socket) {
     if(!(this instanceof Session)) return new Session(socket);
@@ -12,18 +12,11 @@ var Session = module.exports = function(socket) {
     this.req = socket.handshake;
     this.socket = socket;
     this.user = socket.handshake.user;
-    this.id = this.uid();
-
-    sessions[id] = this;
 };
 
 var _proto = Session.prototype;
 
-Session.uid = 0;
-
-_proto.uid = function() {
-    return Session.uid++;
-};
+Session.sessions = {};
 
 _proto.msgHandle = function(msg) {
     logger.log(msg);
