@@ -14,10 +14,22 @@
 
     .terms-nav {
         position: relative;
+        background-color: #191B1D;
         .term-plus {
-            position: absolute;
-            color: #DDD;
+            float: left;
+            width: 15px;
+            line-height: 30px;
             cursor: pointer;
+            @include gradient(#4E5051, #3C3E3F, #353638);
+            @extend .border_style;
+            &:hover {
+                @extend .border_style;
+                @include gradient(#4D4D4D, #242424, #2A2E31);
+                color: #FFF;
+            }
+        }
+        .glyphicon-plus {
+            color: #DDD;
             @include scale(0.8, 0.8);
             &:hover {
                 color: #FFF;
@@ -26,8 +38,9 @@
     }
 
     .nav-tabs {
+        float: left;
+        line-height: 30px;
         border-color: #383C3F;
-        background-color: #191B1D;
         > li {
             margin-right: -2px;
         }
@@ -56,6 +69,14 @@
     }
 }
 
-.terminal-cursor {
-    color: red !important;
+.terminal {
+    font-family: "Source Code Pro Light", Consolas, monospace;
+    font-size: 13px;
+    color: #f0f0f0;
+    background: #000;
+}
+
+.reverse-video {
+    color: #000;
+    background: #f0f0f0;
 }

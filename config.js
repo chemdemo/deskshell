@@ -15,7 +15,7 @@ module.exports = {
         'key': './server/ca.key',
         'cert': './server/ca.crt'
     },
-    'shell': 'sh',
+    'shell': 'bash',
     'cwd': '/',
     'limitPerUser': 5,
     'sessionTimeout': 600000,
@@ -23,10 +23,10 @@ module.exports = {
         'termName': 'xterm',
         'geometry': [80, 24],
         'scrollback': 1000,
-        'visualBell': false,
-        'popOnBell': false,
+        'visualBell': true,
+        'popOnBell': true,
         'cursorBlink': true,
-        'screenKeys': false,
+        'screenKeys': true,
         'colors': [
             '#2e3436',
             '#cc0000',
