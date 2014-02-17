@@ -14,4 +14,4 @@ var TermManager = require('./TermManager');
 
 new TermManager();
 
-// $('#files').html(tmpl['fileList']({list: mock.fileList}));
+$('#files').html(tmpl['fileList']({list: mock.fileList}));

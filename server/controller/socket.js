@@ -28,10 +28,10 @@ exports.handleTermConnection = function(socket) {
 exports.handleFsConnection = function(socket) {
     var session = FsSession(socket);
 
-    socket.on('message', session.msgHandle);
-    socket.on('read-path', session.readpathHandle);
-    socket.on('move-path', session.movepathHandle);
-    socket.on('rm-path', session.rmpathHandle);
-    socket.on('create-path', session.createpathHandle);
-    socket.on('write-path', session.writepathHandle);
+    socket.on('message', session.msgHandle.bind(session));
+    socket.on('read-path', session.readpathHandle.bind(session));
+    socket.on('move-path', session.movepathHandle.bind(session));
+    socket.on('rm-path', session.rmpathHandle.bind(session));
+    socket.on('create-path', session.createpathHandle.bind(session));
+    socket.on('write-path', session.writepathHandle.bind(session));
 };
