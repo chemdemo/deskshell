@@ -28,9 +28,11 @@ exports.fsSessionHandle = function(socket) {
     var session = FsSession(socket);
 
     socket.on('message', session.msgHandle.bind(session));
-    socket.on('read-path', session.readpathHandle.bind(session));
-    socket.on('move-path', session.movepathHandle.bind(session));
-    socket.on('rm-path', session.rmpathHandle.bind(session));
-    socket.on('create-path', session.createpathHandle.bind(session));
-    socket.on('write-path', session.writepathHandle.bind(session));
+    socket.on('lstat', session.lstat.bind(session));
+    socket.on('read-path', session.readPath.bind(session));
+    socket.on('mv-path', session.mvPath.bind(session));
+    socket.on('rm-path', session.rmPath.bind(session));
+    socket.on('create-folder', session.createFolder.bind(session));
+    socket.on('create-file', session.createFile.bind(session));
+    socket.on('write-file', session.writeFile.bind(session));
 };

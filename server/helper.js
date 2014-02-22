@@ -36,3 +36,26 @@ exports.hashed = function(text) {
     if (!text) return;
     return text.length === 40 && !/[^a-f0-9]/.test(text);
 };
+
+exports.parallel = function(arr, iterator, callback) {
+    var result = [];
+    var len = arr.length;
+    var i = 0;
+
+    function next() {
+        if(i < len) {
+            iterator(arr[i], function(err, r) {
+                if(err) {
+                    callback(err, result);
+                } else {
+                    result[i++] = r;
+                    next();
+                }
+            });
+        } else {
+            callback(null, result);
+        }
+    };
+
+    next();
+};

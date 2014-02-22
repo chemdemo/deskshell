@@ -2,6 +2,7 @@ https://github.com/gonzalo123/webConsole
 https://github.com/cloudhead/http-console
 https://github.com/coderaiser/cloudcmd
 http://help.nitrous.io/ide-general/
+http://io.cloudcmd.io/fs/home/io
 http://www.webtian.com/new/hackertyper/
 
 http://fontawesome.io/icons/
