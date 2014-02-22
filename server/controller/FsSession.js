@@ -15,7 +15,7 @@ var FsSession = module.exports = function(socket) {
     Session.call(this, socket);
 };
 
-util.inherit(FsSession, Session);
+util.inherits(FsSession, Session);
 
 var _proto = FsSession.prototype;
 

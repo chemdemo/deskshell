@@ -10,8 +10,8 @@ var DeskShell = module.exports = {};
 var ui = require('./ui');
 var tmpl = require('./tmpl')['Tmpl'];
 var mock = require('./mock_data');
-var TermManager = require('./TermManager');
+// var TermManager = require('./TermManager');
 
-new TermManager();
+// new TermManager();
 
 $('#files').html(tmpl['fileList']({list: mock.fileList}));

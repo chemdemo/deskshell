@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var config = require('../config');
 var ctrl = require('./controller');
+var isWin = /\//.test(__dirname);
 
 module.exports = function(app, io) {
     app.get('/', function(req, res, next) {
@@ -14,11 +15,11 @@ module.exports = function(app, io) {
     });
 
     // io.of('/term').authorization('connection', ctrl.user.auth)
-    //     .on('connection', ctrl.socket.handleTermConnection);
+    //     .on('connection', ctrl.socket.termSessionHandle);
 
     // io.of('/fs').authorization('connection', ctrl.user.auth);
-    //     .on('connection', ctrl.socket.handleFsConnection);
+    //     .on('connection', ctrl.socket.fsSessionHandle);
 
-    io.of('/term').on('connection', ctrl.socket.handleTermConnection);
-    io.of('/fs').on('connection', ctrl.socket.handleFsConnection);
+    !isWin && io.of('/term').on('connection', ctrl.socket.termSessionHandle);
+    io.of('/fs').on('connection', ctrl.socket.fsSessionHandle);
 };

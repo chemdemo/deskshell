@@ -5,14 +5,13 @@ var user = require('./user');
 var conf = require('../../config');
 var helper = require('../helper');
 var logger = helper.logger;
-var TermSession = require('./TermSession');
 var FsSession = require('./FsSession');
 
 var users = conf.users;
 
 // var sessions = exports.sessions = {};
-
-exports.handleTermConnection = function(socket) {
+exports.termSessionHandle = function(socket) {
+    var TermSession = require('./TermSession');
     var session = new TermSession(socket);
 
     socket.on('message', session.msgHandle.bind(session));
@@ -25,7 +24,7 @@ exports.handleTermConnection = function(socket) {
     socket.on('request-paste', session.pasteHandle.bind(session));
 };
 
-exports.handleFsConnection = function(socket) {
+exports.fsSessionHandle = function(socket) {
     var session = FsSession(socket);
 
     socket.on('message', session.msgHandle.bind(session));
