@@ -6,12 +6,17 @@
 'use strict';
 
 var helper = require('./helper');
+var TreePanel = require('./TreePanel');
 var FilePanel = require('./FilePanel');
 var EditorPanel = require('./EditorPanel');
 
-var PanelManager = module.exports = function() {
-    if(!(this instanceof PanelManager)) return new PanelManager();
+var PanelManager = module.exports = function(conf) {
+    if(!(this instanceof PanelManager)) return new PanelManager(conf);
 
+    var self = this;
+    var socket = this.socket = io.connect('./fs');
+
+    this.serverConfig = conf;
     this.panelNav = $('#panels-tab-nav');
     this.panelContent = $('#panels-tab-content');
     this.navPrefix = 'tab-nav-';
@@ -21,9 +26,14 @@ var PanelManager = module.exports = function() {
     };
     this.filePanelSettings = {};
 
+    this.treePanel = new TreePanel(this);
     this.panels = {};
 
-    this.bind();
+    socket.on('connect', function onSocketConnect() {
+        console.log('Fs socket connected.');
+
+        self.bind();
+    });
 };
 
 var _proto = PanelManager.prototype;

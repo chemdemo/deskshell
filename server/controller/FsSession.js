@@ -46,7 +46,7 @@ _proto.readPath = function(p, callback) {
         if(stats.isFile()) return readFile(p, callback);
 
         callback(null, {
-            n: basename(p)
+            n: basename(p),
             t: 1,
             p: p,
             e: extname(p)
