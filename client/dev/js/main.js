@@ -9,11 +9,13 @@ function init() {
     var ui = require('./ui');
     var tmpl = require('./tmpl')['Tmpl'];
     var mock = require('./mock_data');
+    var PanelManager = require('./PanelManager');
+    var TermManager = require('./TermManager');
 
     $.get('/config', function(conf) {
-        ;
+        console.log(conf);
+        new PanelManager(conf);
     });
-    // var TermManager = require('./TermManager');
 
     // new TermManager();
 

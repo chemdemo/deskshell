@@ -19,9 +19,6 @@ var app = express();
 var server = http.Server(app);
 var io = sio.listen(server);
 
-// all sessions
-global.sessions = {};
-
 app.use(function(req, res, next) {
     if(req.url.match(/term|fs/)) {
         var setHeader = res.setHeader;

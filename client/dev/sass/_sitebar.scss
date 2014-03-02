@@ -33,6 +33,10 @@ $path_color: #555;
         }
         .path-name {
             position: relative;
+            padding-left: 10px;
+        }
+        .fa + .path-name {
+            padding-left: 0;
         }
         a {
             display: block;
@@ -61,7 +65,7 @@ $path_color: #555;
                 }
             }
         }
-        a.selected {
+        a.active {
             * {
                 /*color: #009FC7;*/
                 color: #FFF;

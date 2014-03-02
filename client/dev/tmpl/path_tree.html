@@ -11,7 +11,11 @@ data model:
 
 <% list.forEach(function(item) { %>
     <li>
-        <a href="javascript: void(0);" data-path="<%= item.p %>" title="<%= item.n %>">
+        <a href="javascript: void(0);"
+            data-type="<%= item.t %>"
+            data-path="<%= item.p %>"
+            title="<%= item.n %>"
+        >
             <% if(item.t === 0) { %>
             <i class="fa fa-caret-right"></i>
             <% } %>

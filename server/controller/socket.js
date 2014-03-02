@@ -30,6 +30,8 @@ exports.fsSessionHandle = function(socket) {
     socket.on('message', session.msgHandle.bind(session));
     socket.on('lstat', session.lstat.bind(session));
     socket.on('read-path', session.readPath.bind(session));
+    socket.on('read-dir', session.readDir.bind(session));
+    socket.on('read-file', session.readFile.bind(session));
     socket.on('mv-path', session.mvPath.bind(session));
     socket.on('rm-path', session.rmPath.bind(session));
     socket.on('create-folder', session.createFolder.bind(session));

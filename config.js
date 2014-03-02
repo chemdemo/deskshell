@@ -16,7 +16,7 @@ module.exports = {
         'cert': './server/ca.crt'
     },
     'shell': 'bash',
-    'cwd': '/',
+    'cwd': './',
     'limitPerUser': 5,
     'sessionTimeout': 600000,
     'term': {

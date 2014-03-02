@@ -53,6 +53,7 @@ exports.parallel = function(arr, iterator, callback) {
                 }
             });
         } else {
+            // console.log('result:', result)
             callback(null, result);
         }
     };

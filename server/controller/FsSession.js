@@ -54,6 +54,40 @@ _proto.readPath = function(p, callback) {
     });
 };
 
+_proto.readDir = function readDir(p, callback) {
+    fs.readdir(p, function(err, list) {
+        if(err) return callback(err);
+        helper.parallel(list, function(_p, cb) {
+            _p = path.resolve(p, _p);
+            lstat(_p, function(err, stats) {
+                if(err) return cb(err);
+
+                if(stats.isDirectory()) {
+                    cb(null, {
+                        n: basename(_p),
+                        t: 0,
+                        p: _p
+                    });
+                } else {
+                    cb(null, {
+                        n: basename(_p),
+                        t: 1,
+                        p: _p,
+                        e: extname(_p)
+                    });
+                }
+            });
+        }, callback);
+    });
+};
+
+_proto.readFile = function readFile(p, callback) {
+    fs.readFile(p, function(err, buf) {
+        if(err) return callback(err);
+        callback(null, buf.toString('utf8'));
+    });
+};
+
 _proto.mvPath = function(p, target, callback) {
     fs.stat(p, function(err, stats) {
         if(err) return callback(err);
@@ -93,38 +127,4 @@ function basename(p) {
 
 function extname(p) {
     return path.extname(p).slice(1);
-};
-
-function readDir(p, callback) {
-    fs.readDir(p, function(err, list) {
-        if(err) return callback(err);
-        helper.parallel(list, function(_p, cb) {
-            _p = path.resolve(p, _p);
-            lstat(_p, function(err, stats) {
-                if(err) return cb(err);
-
-                if(stats.isDirectory()) {
-                    cb(null, {
-                        n: basename(_p),
-                        t: 0,
-                        p: _p
-                    });
-                } else {
-                    cb(null, {
-                        n: basename(_p),
-                        t: 1,
-                        p: _p,
-                        e: extname(_p)
-                    });
-                }
-            });
-        }, callback);
-    });
-};
-
-function readFile(p, callback) {
-    fs.readFile(p, function(err, buf) {
-        if(err) return callback(err);
-        callback(null, buf.toString('utf8'));
-    });
 };

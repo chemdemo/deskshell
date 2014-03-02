@@ -5,18 +5,18 @@
 
 var _proto = EditorPanel.prototype;
 
-function EditorPanel(elId, data, settings) {
-    if(!(this instanceof EditorPanel)) return new EditorPanel(elId, data, settings);
+function EditorPanel(id, data, settings) {
+    if(!(this instanceof EditorPanel)) return new EditorPanel(id, data, settings);
 
-    this.init(elId, data, settings);
+    this.init(id, data, settings);
 };
 
-_proto.init = function(elId, data, settings) {
-    if(!elId) throw Error('Element id is required.');
+_proto.init = function(id, data, settings) {
+    if(!id) throw Error('Element id is required.');
 
-    this.elId = elId;
+    this.id = id;
 
-    var editor = this.editor = ace.edit(elId);
+    var editor = this.editor = ace.edit(id);
     var session = this.session = editor.getSession();
 
     editor.setShowPrintMargin(false);
