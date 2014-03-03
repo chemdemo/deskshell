@@ -29,6 +29,14 @@ exports.uuid = function uuid(len, radix) {
     return uuid.join('').toLowerCase();
 };
 
+exports.trim = function(str) {
+    return str.replace(/^\s*/g, '').replace(/\s*$/g, '');
+};
+
+exports.winPathFix = function(str) {
+    return exports.trim(str).replace(/\\/g, '\/');
+};
+
 exports.sanitize = function(s) {
     if(!s) return '';
     return (s + '').replace(/[&<>]/g, '');

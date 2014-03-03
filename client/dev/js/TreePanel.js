@@ -16,7 +16,6 @@ function TreePanel(panelMgr) {
     this.rootTree = $('#path-tree');
     this.pathPrefix = '#path-tree-';
 
-    // this.render({t: 0, p: panelMgr.serverConfig.cwd, n: 'deskshell'}, this.rootTree);
     this.bind();
 };
 
@@ -46,32 +45,20 @@ _proto.load = function(options) {
     var path = options.path;
     var name = options.name;
     var data = options.data;
-    var $el = this.rootTree.find('a[data-path=\"' + path + '\"]');
+    var $el = this.rootTree.find('a[data-path=\'' + path + '\']');
 
     if(!$el.length) {
-        if(type === 0) {
-            this.render({
-                t: 0,
-                p: this.panelMgr.serverConfig.cwd,
-                n: name || 'unknown'
-            }, this.rootTree);
-        }
-
-        if(type === 1) return alert('This is a bug!');
+        return alert('sdsffs');
     } else {
         if(type === 0) {
-            this.render(data, $el.parent());
+            this.insert(data, $el.parent());
         }
     }
 
     // this.select(uuid);
 };
 
-_proto.insert = function(path, parentNode) {
-    ;
-};
-
-_proto.render = function(list, parentNode) {
+_proto.insert = function(list, parentNode) {
     var s = '<ul>';
 
     s += tmpl['pathTree']({list: $.isArray(list) ? list : [list]});
@@ -86,8 +73,8 @@ _proto.redirect = function(path) {
     ;
 };
 
-_proto.select = function(uuid) {
-    var path = this.panelMgr.findPathById(uuid);
+_proto.select = function(path) {
+    // var path = this.panelMgr.findPathById(uuid);
     var rootTree = this.rootTree;
     var $el = rootTree.find('a[data-path=\"' + path + '\"]');
 

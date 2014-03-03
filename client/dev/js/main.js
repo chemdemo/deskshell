@@ -13,7 +13,7 @@ function init() {
     var TermManager = require('./TermManager');
 
     $.get('/config', function(conf) {
-        console.log(conf);
+        // console.log(conf);
         new PanelManager(conf);
     });
 

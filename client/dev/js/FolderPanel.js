@@ -16,8 +16,8 @@ function FolderPanel(id, data) {
     if(data) this.fill(data);
 };
 
-_proto.fill = function(data) {
-    $(this.id).html(tmpl['fileList']({list: data}));
+_proto.fill = function(list) {
+    $('#' + this.id).html(tmpl['fileList']({list: $.isArray(list) ? list : [list]}));
 };
 
 _proto.setContent = function() {

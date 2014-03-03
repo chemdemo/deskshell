@@ -60,3 +60,11 @@ exports.parallel = function(arr, iterator, callback) {
 
     next();
 };
+
+exports.trim = function(str) {
+    return str.replace(/^\s*/g, '').replace(/\s*$/g, '');
+};
+
+exports.winPathFix = function(str) {
+    return exports.trim(str).replace(/\\/g, '\/');
+};

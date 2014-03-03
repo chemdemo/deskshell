@@ -41,15 +41,16 @@ _proto.readPath = function(p, callback) {
     lstat(p, function(err, stats) {
         if(err) return callback(err);
 
-        if(stats.isDirectory()) return readDir(p, callback);
+        // if(stats.isDirectory()) return readdir(p, callback);
 
-        if(stats.isFile()) return readFile(p, callback);
+        // if(stats.isFile()) return readFile(p, callback);
+
+        var abs = helper.winPathFix(path.resolve(p));
 
         callback(null, {
-            n: basename(p),
-            t: 1,
-            p: p,
-            e: extname(p)
+            n: basename(abs),
+            t: stats.isDirectory() ? 0 : 1,
+            p: abs
         });
     });
 };
@@ -66,18 +67,28 @@ _proto.readDir = function readDir(p, callback) {
                     cb(null, {
                         n: basename(_p),
                         t: 0,
-                        p: _p
+                        p: helper.winPathFix(_p)
                     });
                 } else {
                     cb(null, {
                         n: basename(_p),
                         t: 1,
-                        p: _p,
+                        p: helper.winPathFix(_p),
                         e: extname(_p)
                     });
                 }
             });
-        }, callback);
+        }, callback/*function(err, list) {
+            if(err) return callback(err);
+            callback(null, {
+                parent: {
+                    n: basename(p),
+                    t: 0,
+                    p: path.resolve(p),
+                },
+                child: list
+            });
+        }*/);
     });
 };
 

@@ -14,6 +14,7 @@ var PanelManager = module.exports = function(conf) {
     if(!(this instanceof PanelManager)) return new PanelManager(conf);
 
     var self = this;
+    var treePanel;
     var socket = this.socket = io.connect('/fs');
 
     this.serverConfig = conf;
@@ -26,15 +27,20 @@ var PanelManager = module.exports = function(conf) {
     };
     this.folderPanelSettings = {};
 
-    this.treePanel = new TreePanel(this);
+    treePanel = this.treePanel = new TreePanel(this);
     this.panels = {};
     this.loaded = {}; // {path: uuid}
 
     socket.on('connect', function onSocketConnect() {
         console.log('Fs socket connected.');
 
-        self.load(conf.cwd, 0);
-        self.bind();
+        self.readPath(conf.cwd, function(err, info) {
+            if(err) return alert('read path info error:\n', err);
+
+            treePanel.insert(info, treePanel.rootTree);
+            self.load(info.p, info.t, info.n);
+            self.bind();
+        });
     });
 
     socket.on('error', function(err) {
@@ -44,19 +50,6 @@ var PanelManager = module.exports = function(conf) {
 };
 
 var _proto = PanelManager.prototype;
-
-_proto.findPathById = function(uuid) {
-    var loaded = this.loaded;
-    var paths = Object.keys(loaded);
-    var i = 0;
-    var len = paths.length;
-
-    for(i < 0; i < len; i++) {
-        if(loaded[paths[i]] === uuid) return paths[i];
-    }
-
-    return '';
-};
 
 _proto.bind = function() {
     var self = this;
@@ -104,7 +97,26 @@ _proto.bind = function() {
     });
 };
 
+_proto.findPathById = function(uuid) {
+    var loaded = this.loaded;
+    var paths = Object.keys(loaded);
+    var i = 0;
+    var len = paths.length;
+
+    for(i < 0; i < len; i++) {
+        if(loaded[paths[i]] === uuid) return paths[i];
+    }
+
+    return '';
+};
+
+_proto.readPath = function(path, callback) {
+    this.socket.emit('read-path', helper.trim(path), callback);
+};
+
 _proto.load = function(path, type, name) {
+    path = helper.winPathFix(path);
+
     var self = this;
     var uuid = this.loaded[path];
     var evt = 'read-' + (0 === type ? 'dir' : 'file');
@@ -178,8 +190,8 @@ _proto.createPanel = function(options) {
 
 _proto.select = function(uuid) {
     // this.panelNav.find('.active').removeClass('active');
-    this.treePanel.select(uuid);
-    $('#' + this.navPrefix + uuid).trigger('click');
+    this.treePanel.select(this.findPathById(uuid));
+    $('#' + this.navPrefix + uuid).find('> a').trigger('click');
 };
 
 _proto.editorsSet = function(name, value) {
