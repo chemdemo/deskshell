@@ -138,8 +138,8 @@ module.exports = function(grunt) {
                 files: ['<%= base.dev %>/tmpl/*.html'],
                 tasks: ['jst']
             },
-            'build-libs': {
-                files: ['<%= base.dev %>/js/libs/*.js'],
+            'build-lib': {
+                files: ['<%= base.dev %>/js/lib/*.js'],
                 tasks: ['concat:dev']
             }
         },
@@ -163,11 +163,11 @@ module.exports = function(grunt) {
         concat: {
             dev: {
                 src: [
-                    '<%= base.dev %>/js/libs/jquery.js',
-                    '<%= base.dev %>/js/libs/underscore.js',
-                    '<%= base.dev %>/js/libs/bootstrap.js',
+                    '<%= base.dev %>/js/lib/jquery.js',
+                    '<%= base.dev %>/js/lib/underscore.js',
+                    '<%= base.dev %>/js/lib/bootstrap.js',
                 ],
-                dest: '<%= base.dev %>/js/libs.min.js'
+                dest: '<%= base.dev %>/js/lib.min.js'
             }
         },
 
@@ -182,7 +182,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    '<%= base.build %>/js/libs.min.js': ['<%= base.dev %>/js/libs.min.js'],
+                    '<%= base.build %>/js/lib.min.js': ['<%= base.dev %>/js/lib.min.js'],
                     '<%= base.build %>/js/main.min.js': ['<%= base.build %>/js/main.min.js']
                 }
             }
@@ -230,7 +230,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', function() {
         grunt.task.run('jst');
-        // concat js libs files
+        // concat js lib files
         grunt.task.run('concat');
         grunt.task.run('browserify:dev');
         grunt.task.run('compass:dev');

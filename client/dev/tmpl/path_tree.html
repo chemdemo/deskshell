@@ -17,7 +17,7 @@ data model:
             title="<%= item.n %>"
         >
             <% if(item.t === 0) { %>
-            <i class="fa fa-caret-right"></i>
+            <i class="fa fa-caret-<%= (item.dir || 'right') %>"></i>
             <% } %>
             <span class="path-name"><%= item.n %></span>
         </a>

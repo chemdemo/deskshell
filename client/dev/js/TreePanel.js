@@ -35,8 +35,37 @@ _proto.bind = function() {
         var isActive = $this.hasClass('active');
         var $li;
 
+        if(type === 0) {
+            var $arrow = $this.find('i.fa');
+
+            if($arrow.hasClass('fa-caret-right')) {
+                $arrow.removeClass('fa-caret-right').addClass('fa-caret-down');
+            } else {
+                $arrow.removeClass('fa-caret-down').addClass('fa-caret-right');
+            }
+
+            $this.parent().find('ul').slideToggle('fast');
+        }
+
         return panelMgr.load(path, type, name);
     });
+
+    // this.rootTree.on('click', 'i.fa', function(e) {
+    //     var cls = this.classList;
+    //     var $ul = $(this).parent().parent().find('ul');
+
+    //     if($ul.length) e.stopPropagation();
+
+    //     if(cls.contains('fa-caret-right')) {
+    //         cls.remove('fa-caret-right');
+    //         cls.add('fa-caret-down');
+    //     } else {
+    //         cls.remove('fa-caret-down');
+    //         cls.add('fa-caret-right');
+    //     }
+
+    //     $ul.slideToggle('fast');
+    // });
 };
 
 _proto.load = function(options) {

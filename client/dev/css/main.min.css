@@ -7,7 +7,7 @@ body, button, select, textarea, input {
   word-wrap: break-word;
 }
 
-/* line 15, ../sass/_base.scss */
+/* line 14, ../sass/_base.scss */
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6,
 pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
   margin: 0;
@@ -189,33 +189,32 @@ div[contenteditable=true] {
   top: 0px;
   color: #666;
   display: none;
-  -webkit-transform: scale(0.7, 0.7);
   -moz-transform: scale(0.7, 0.7);
   -ms-transform: scale(0.7, 0.7);
-  -o-transform: scale(0.7, 0.7);
+  -webkit-transform: scale(0.7, 0.7);
   transform: scale(0.7, 0.7);
 }
-/* line 182, ../sass/_base.scss */
+/* line 181, ../sass/_base.scss */
 .nav-tabs .active .close-tab,
 .nav-tabs li:hover .close-tab {
   display: block;
 }
 
 /* line 1, ../sass/_topbar.scss */
-.header {
+header {
   height: 30px;
-  background-color: #121619;
+  background-color: #5F646E;
   padding: 0 2em;
   line-height: 30px;
   color: #FFF;
   /*border-bottom: 1px solid #333;*/
 }
 /* line 8, ../sass/_topbar.scss */
-.header .user {
+header .user {
   float: right;
 }
 /* line 11, ../sass/_topbar.scss */
-.header h1 {
+header h1 {
   line-height: 30px;
   font-size: 16px;
 }
@@ -229,7 +228,7 @@ div[contenteditable=true] {
   -o-user-select: none;
   user-select: none;
 }
-/* line 4, ../sass/_grid.scss */
+/* line 3, ../sass/_grid.scss */
 .gui .col-md-2,
 .gui .col-md-10 {
   padding-left: 0;
@@ -238,14 +237,14 @@ div[contenteditable=true] {
 /* line 3, ../sass/_sitebar.scss */
 .sidebar {
   height: 570px;
-  background-color: #D1D9E2;
+  background-color: #ECF0F1;
   padding-right: 0;
-  border-right: 1px solid #2A3239;
+  border-right: 1px solid #C0C9D1;
 }
 /* line 8, ../sass/_sitebar.scss */
 .sidebar .path {
   overflow: hidden;
-  border-bottom: 1px solid #2A3239;
+  border-bottom: 1px solid #C0C9D1;
 }
 /* line 12, ../sass/_sitebar.scss */
 .sidebar .path-val {
@@ -268,32 +267,33 @@ div[contenteditable=true] {
 .sidebar .path-tree {
   overflow-x: auto;
   position: relative;
+  height: 540px;
 }
-/* line 30, ../sass/_sitebar.scss */
+/* line 31, ../sass/_sitebar.scss */
 .sidebar .path-tree .fa {
   margin-right: 2px;
   position: relative;
 }
-/* line 34, ../sass/_sitebar.scss */
+/* line 35, ../sass/_sitebar.scss */
 .sidebar .path-tree .path-name {
   position: relative;
   padding-left: 10px;
 }
-/* line 38, ../sass/_sitebar.scss */
+/* line 39, ../sass/_sitebar.scss */
 .sidebar .path-tree .fa + .path-name {
   padding-left: 0;
 }
-/* line 41, ../sass/_sitebar.scss */
+/* line 42, ../sass/_sitebar.scss */
 .sidebar .path-tree a {
   display: block;
   padding-left: 5px;
   padding-right: 5px;
 }
-/* line 45, ../sass/_sitebar.scss */
+/* line 46, ../sass/_sitebar.scss */
 .sidebar .path-tree a * {
-  color: #555;
+  color: #135A94;
 }
-/* line 48, ../sass/_sitebar.scss */
+/* line 49, ../sass/_sitebar.scss */
 .sidebar .path-tree a:before {
   content: ' ';
   position: absolute;
@@ -308,26 +308,27 @@ div[contenteditable=true] {
   background-image: -o-linear-gradient(top, #b2b2b2, #a3a3a3, #8b8b8b);
   background-image: inear-gradient(top, #b2b2b2, #a3a3a3, #8b8b8b);
 }
-/* line 59, ../sass/_sitebar.scss */
+/* line 60, ../sass/_sitebar.scss */
 .sidebar .path-tree a:hover * {
-  color: #000;
+  color: #1abc9c;
 }
-/* line 62, ../sass/_sitebar.scss */
+/* line 63, ../sass/_sitebar.scss */
 .sidebar .path-tree a:hover:before {
   display: block;
   opacity: 0.2;
 }
-/* line 69, ../sass/_sitebar.scss */
+/* line 70, ../sass/_sitebar.scss */
 .sidebar .path-tree a.active * {
   /*color: #009FC7;*/
   color: #FFF;
+  color: #1dd2af;
 }
-/* line 73, ../sass/_sitebar.scss */
+/* line 75, ../sass/_sitebar.scss */
 .sidebar .path-tree a.active:before {
   display: block;
   opacity: 0.5;
 }
-/* line 78, ../sass/_sitebar.scss */
+/* line 80, ../sass/_sitebar.scss */
 .sidebar .path-tree li ul {
   padding-left: 1em;
 }
@@ -344,17 +345,18 @@ div[contenteditable=true] {
   padding: 0;
   height: 570px;
 }
-/* line 13, ../sass/_panel.scss */
+/* line 12, ../sass/_panel.scss */
 .panels .tab-content,
 .panels .tab-pane {
   height: 541px;
+  overflow-y: auto;
 }
-/* line 16, ../sass/_panel.scss */
+/* line 17, ../sass/_panel.scss */
 .panels .file-list {
   padding: 2em;
   color: #555;
 }
-/* line 19, ../sass/_panel.scss */
+/* line 20, ../sass/_panel.scss */
 .panels .file-list li {
   display: inline-block;
   width: 80px;
@@ -362,12 +364,12 @@ div[contenteditable=true] {
   text-align: center;
   cursor: pointer;
 }
-/* line 32, ../sass/_panel.scss */
+/* line 33, ../sass/_panel.scss */
 .panels .file-list .fa {
   font-size: 3em;
   margin-top: 12px;
 }
-/* line 36, ../sass/_panel.scss */
+/* line 37, ../sass/_panel.scss */
 .panels .file-list .path-name {
   display: block;
   width: 70px;
@@ -376,7 +378,7 @@ div[contenteditable=true] {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* line 45, ../sass/_panel.scss */
+/* line 46, ../sass/_panel.scss */
 .panels .ace_editor {
   font-family: 'Consolas', 'Monaco', 'source-code-pro', monospace;
 }
@@ -427,10 +429,9 @@ div[contenteditable=true] {
 /* line 32, ../sass/_terms.scss */
 .terms .terms-nav .glyphicon-plus {
   color: #DDD;
-  -webkit-transform: scale(0.8, 0.8);
   -moz-transform: scale(0.8, 0.8);
   -ms-transform: scale(0.8, 0.8);
-  -o-transform: scale(0.8, 0.8);
+  -webkit-transform: scale(0.8, 0.8);
   transform: scale(0.8, 0.8);
 }
 /* line 35, ../sass/_terms.scss */

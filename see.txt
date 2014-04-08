@@ -8,3 +8,4 @@ http://www.webtian.com/new/hackertyper/
 http://fontawesome.io/icons/
 
 http://www.mongohq.com/
+http://www.promisejs.org/intro/

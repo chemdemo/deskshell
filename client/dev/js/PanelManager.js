@@ -28,7 +28,7 @@ var PanelManager = module.exports = function(conf) {
     this.folderPanelSettings = {};
 
     treePanel = this.treePanel = new TreePanel(this);
-    this.panels = {};
+    this.panels = {}; // {path: {}}
     this.loaded = {}; // {path: uuid}
 
     socket.on('connect', function onSocketConnect() {
@@ -37,6 +37,7 @@ var PanelManager = module.exports = function(conf) {
         self.readPath(conf.cwd, function(err, info) {
             if(err) return alert('read path info error:\n', err);
 
+            info.dir = 'down';
             treePanel.insert(info, treePanel.rootTree);
             self.load(info.p, info.t, info.n);
             self.bind();
@@ -55,9 +56,24 @@ _proto.bind = function() {
     var self = this;
     var t;
 
+    this.panelNav.on('click', '> li', function(e) {
+        var uuid = this.id.replace(/tab-nav-/g, '');
+        var path = self.findPathById(uuid);
+        console.log(path)
+
+        // $('#path-tree').find('a[data-path=\"' + path + '\"]').trigger('click');
+    });
+
     this.panelNav.on('click', '.close-tab', function closeTab(e) {
         e.stopPropagation();
-        self.destroy($(this).attr('data-uuid'));
+
+        var $this = $(this);
+        var uuid = $this.attr('data-uuid');
+        var idx = $this.parent().index();
+        var $prevTab = self.panelNav.find('li:eq(' + (idx - 1) + ')');
+
+        self.destroy(uuid);
+        if($prevTab.length) $prevTab.parent().trigger('click');
     });
 
     this.panelNav.on('dragstart', '> li', function onMousedown(e) {
@@ -92,8 +108,10 @@ _proto.bind = function() {
         self = $(this);
         w = self.offsetWidth();
         p = self.parent();
+    });
 
-        console.log(e.target === t);
+    this.panelContent.on('click', '.file-list li', function(e) {
+        $('#path-tree').find('a[data-path=\"' + $(this).data('path') + '\"]').trigger('click');
     });
 };
 

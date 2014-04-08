@@ -12,6 +12,7 @@ $box_size: 80px;
     .tab-content,
     .tab-pane {
         height: 541px;
+        overflow-y: auto;
     }
     .file-list {
         padding: 2em;

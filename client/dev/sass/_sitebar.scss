@@ -2,12 +2,12 @@ $path_color: #555;
 
 .sidebar {
     height: 570px;
-    background-color: #D1D9E2;
+    background-color: #ECF0F1;
     padding-right: 0;
-    border-right: 1px solid #2A3239;
+    border-right: 1px solid #C0C9D1;
     .path {
         overflow: hidden;
-        border-bottom: 1px solid #2A3239;
+        border-bottom: 1px solid #C0C9D1;
     }
     .path-val {
         color: #FFF;
@@ -27,6 +27,7 @@ $path_color: #555;
     .path-tree {
         overflow-x: auto;
         position: relative;
+        height: 540px;
         .fa {
             margin-right: 2px;
             position: relative;
@@ -43,7 +44,7 @@ $path_color: #555;
             padding-left: 5px;
             padding-right: 5px;
             * {
-                color: #555;
+                color: #135A94;
             }
             &:before {
                 content: ' ';
@@ -57,7 +58,7 @@ $path_color: #555;
             }
             &:hover {
                 * {
-                    color: #000;
+                    color: #1abc9c;
                 }
                 &:before {
                     display: block;
@@ -69,6 +70,7 @@ $path_color: #555;
             * {
                 /*color: #009FC7;*/
                 color: #FFF;
+                color: #1dd2af;
             }
             &:before {
                 display: block;
