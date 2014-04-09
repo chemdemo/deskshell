@@ -9,7 +9,7 @@
 //     ;
 // };
 
-$('#gui').on('click', '.nav-tabs a', function(e) {
-    e.preventDefault();
-    $(this).tab('show');
-});
+// $('#gui').on('click', '.nav-tabs a', function(e) {
+//     e.preventDefault();
+//     $(this).tab('show');
+// });

@@ -165,7 +165,7 @@ module.exports = function(grunt) {
                 src: [
                     '<%= base.dev %>/js/lib/jquery.js',
                     '<%= base.dev %>/js/lib/underscore.js',
-                    '<%= base.dev %>/js/lib/bootstrap.js',
+                    // '<%= base.dev %>/js/lib/bootstrap.js',
                 ],
                 dest: '<%= base.dev %>/js/lib.min.js'
             }

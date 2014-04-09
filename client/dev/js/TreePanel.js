@@ -110,6 +110,7 @@ _proto.select = function(path) {
     if(path && $el.length) {
         rootTree.find('.active').removeClass('active');
         $el.addClass('active');
+        // $el[0].scrollIntoView();
     } else {
         console.error('can not find path in root tree.');
     }

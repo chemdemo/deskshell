@@ -59,21 +59,35 @@ _proto.bind = function() {
     this.panelNav.on('click', '> li', function(e) {
         var uuid = this.id.replace(/tab-nav-/g, '');
         var path = self.findPathById(uuid);
-        console.log(path)
+        console.log(this)
 
-        // $('#path-tree').find('a[data-path=\"' + path + '\"]').trigger('click');
+        if($(this).hasClass('active')) return;
+
+        self.treePanel.select(path);
+        self.select(uuid);
     });
 
     this.panelNav.on('click', '.close-tab', function closeTab(e) {
         e.stopPropagation();
 
         var $this = $(this);
+        var $p = $this.parent();
         var uuid = $this.attr('data-uuid');
-        var idx = $this.parent().index();
-        var $prevTab = self.panelNav.find('li:eq(' + (idx - 1) + ')');
+        var idx;
+        var $nextTab;
+
+        if($p.hasClass('active')) {
+            idx = $p.index();
+            $nextTab = self.panelNav.find('li:eq(' + (idx - 1) + ')');
+            if($nextTab.length) {
+                $nextTab.trigger('click');
+            } else {
+                $nextTab = self.panelNav.find('li:eq(' + (idx + 1) + ')');
+                if($nextTab.length) $nextTab.trigger('click');
+            }
+        }
 
         self.destroy(uuid);
-        if($prevTab.length) $prevTab.parent().trigger('click');
     });
 
     this.panelNav.on('dragstart', '> li', function onMousedown(e) {
@@ -180,7 +194,7 @@ _proto.createPanel = function(options) {
     var navId = this.navPrefix + uuid;
     var id = this.contentPrefix + uuid;
     var navStr = '<li id="' + navId + '">\
-            <a href="#' + id + '" data-toggle="tab">' + name + '</a>\
+            <a href="javascript: void(0);" data-toggle="tab">' + name + '</a>\
             <i class="glyphicon glyphicon-remove close-tab" data-uuid="' + uuid + '" title="close"></i>\
         </li>';
     var contentStr = '<div class="' + (type === 0 ? 'file-list' : 'ace-editor') +
@@ -207,9 +221,12 @@ _proto.createPanel = function(options) {
 };
 
 _proto.select = function(uuid) {
-    // this.panelNav.find('.active').removeClass('active');
+    this.panelNav.find('.active').removeClass('active');
+    this.panelContent.find('.active').removeClass('active');
+    $('#' + this.navPrefix + uuid).addClass('active');
+    $('#' + this.contentPrefix + uuid).addClass('active');
     this.treePanel.select(this.findPathById(uuid));
-    $('#' + this.navPrefix + uuid).find('> a').trigger('click');
+    // $('#' + this.navPrefix + uuid).find('> a').trigger('click');
 };
 
 _proto.editorsSet = function(name, value) {
