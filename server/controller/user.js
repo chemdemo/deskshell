@@ -1,46 +1,77 @@
 'use strict';
 
-var express = require('express');
+var basicAuth = require('basic-auth');
 var conf = require('../../config');
 var helper = require('../helper');
 var logger = helper.logger;
 
 var users = conf.users;
 var hashed = exports.hashed = {};
+var called;
+var check = function(user, pass) {
+    var name = helper.sha1(user);
+    var passwd = helper.sha1(pass);
+    var keys = Object.keys(users);
 
-var auth = exports.auth = function() {
-    if (!Object.keys(users).length) {
+    if(!keys.length) {
         logger.warn('It\'s dangerous while anyone can access with no authorization.');
+
         return function(req, res, next) {
             next();
         };
     }
 
-    Object.keys(users).forEach(function(k) {
-        var name = helper.hashed(k) ? k : helper.sha1(k);
-        var pass = helper.hashed(users[k]) ? users[k] : helper.sha1(users[k]);
+    if(!called) {
+        called = true;
 
-        hashed[name] = pass;
-    });
+        keys.forEach(function(k) {
+            var name = helper.hashed(k) ? k : helper.sha1(k);
+            var pass = helper.hashed(users[k]) ? users[k] : helper.sha1(users[k]);
 
-    // app.use(express.basicAuth(callback))
-    return express.basicAuth(function(user, pass, done) {
-        var name = helper.sha1(user);
-        var passwd = helper.sha1(pass);
+            hashed[name] = pass;
+        });
+    }
 
-        if (!Object.hasOwnProperty.call(hashed, name)) return done('Has no permission to access.');
+    if(!Object.hasOwnProperty.call(hashed, name)) return Error('Has no permission to access.');
+    if(passwd !== hashed[name]) return Error('Authorization failed.');
 
-        if(passwd !== hashed[name]) return done('Authorization failed.');
+    return null;
+};
 
-        done(null, user);
-    });
-}();
+exports.httpAuth = function(req, res, next) {
+    if(!Object.keys(users).length) {
+        logger.warn('It\'s dangerous while anyone can access with no authorization.');
 
-// hsData(handshakeData) => socket request object
-exports.wsAuth = function(hsData, next) {
-    hsData.__proto__ = Stream.prototype;
-    auth(hsData, null, function(err) {
-        hsData.user = hsData.remoteUser || hsData.user;
-        next(err);
-    });
+        return function(req, res, next) {
+            next();
+        };
+    }
+
+    var user = basicAuth(req);
+
+    if(!user) return next(Error('Both username and password were required.'));
+
+    next(check(user.name, user.pass));
+};
+
+// handshakeData => socket request object
+// see => https://github.com/visionmedia/node-basic-auth/blob/master/index.js
+exports.wsAuth = function(handshakeData, next) {
+    var auth = handshakeData.headers.authorization;
+
+    if(!auth) return next(Error('Both username and password were required.'));
+
+    // malformed
+    var parts = auth.split(' ');
+
+    if ('basic' != parts[0].toLowerCase()) return;
+    if (!parts[1]) return;
+    auth = parts[1];
+
+    // credentials
+    auth = new Buffer(auth, 'base64').toString();
+    auth = auth.match(/^([^:]+):(.+)$/);
+    if (!auth) return next(Error('Both username and password were required.'));
+
+    next(check(auth[1], auth[2]));
 };

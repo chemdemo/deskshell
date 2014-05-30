@@ -6,18 +6,46 @@
 'use strict';
 
 var express = require('express');
-var sio = require('socket.io');
 var http = require('http');
 var path = require('path');
+
+var favicon = require('static-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var sio = require('socket.io');
 var term = require('term.js');
 
 var conf = require('./config');
 var routes = require('./server/routes');
 var user = require('./server/controller').user;
+var devStatic = path.resolve(__dirname, 'client/dev');
+var distStatic = path.resolve(__dirname, 'client/dist');
 
 var app = express();
+var env = app.get('env');
 var server = http.Server(app);
 var io = sio.listen(server);
+
+app.set('views', path.join(__dirname, 'server/views'));
+app.set('view engine', 'ejs');
+
+app.use(favicon());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+// app.use(cookieParser(conf.cookieSecret));
+// removed at v4.x
+
+if(env == 'development') {
+    app.use(express.static(devStatic));
+}
+
+if(env == 'production') {
+    app.use(express.static(distStatic, {maxAge: conf.maxAge}));
+}
+
+app.use(express.static(path.resolve(__dirname, 'client/shared')));
 
 app.use(function(req, res, next) {
     if(req.url.match(/term|fs/)) {
@@ -36,27 +64,8 @@ app.use(function(req, res, next) {
 
     next();
 });
-
-app.use(user.auth);
-
+// app.use(user.httpAuth);
 app.use(term.middleware());
-
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-// app.use(express.cookieParser(conf.cookieSecret));
-app.use(app.router);
-
-app.configure('development', function() {
-    app.use(express.static(path.resolve(__dirname, 'client/dev')));
-});
-
-app.configure('production', function() {
-    var p = path.resolve(__dirname, 'client/build');
-    app.use(express.static(p, {maxAge: conf.maxAge}));
-});
-
-app.use(express.static(path.resolve(__dirname, 'client/shared')));
 
 io.configure('procuction', function() {
     io.enable('browser client etag');
@@ -82,7 +91,9 @@ routes(app, io);
 // 404 || 50x
 app.use(function(err, req, res, next) {
     if(err.status === 404) res.send('Page not found!');
-    else res.send('Server error!');
+    else res.send(env == 'development' ? err.stack : 'Server error!');
 });
 
 server.listen(conf.port || 8090, conf.host || 'localhost');
+
+module.exports = app;
