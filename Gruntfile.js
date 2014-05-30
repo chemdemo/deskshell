@@ -13,24 +13,24 @@ module.exports = function(grunt) {
 
         base: {
             'dev': 'client/dev',
-            'build': 'client/build'
+            'dist': 'client/dist'
         },
 
         clean: {
             all: {
-                src: ['<%= base.build %>']
+                src: ['<%= base.dist %>']
             },
             css: {
-                src: ['<%= base.build %>/css/{,*/}*.css']
+                src: ['<%= base.dist %>/css/{,*/}*.css']
             },
             js: {
-                src: ['<%= base.build %>/js/{,*/}*.js']
+                src: ['<%= base.dist %>/js/{,*/}*.js']
             },
             images: {
-                src: ['<%= base.build %>/images/{,*/}*.{png, jpg}']
+                src: ['<%= base.dist %>/images/{,*/}*.{png, jpg}']
             },
             fonts: {
-                src: ['<%= base.build %>/fonts/']
+                src: ['<%= base.dist %>/fonts/']
             }
         },
 
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
                     expand: true,
                     dot: true,
                     cwd: '<%= base.dev %>/',
-                    dest: '<%= base.build %>/',
+                    dest: '<%= base.dist %>/',
                     src: ['css/{,*/}*.min.css']
                 }]
             },
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
                     expand: true,
                     dot: true,
                     cwd: '<%= base.dev %>/',
-                    dest: '<%= base.build %>/',
+                    dest: '<%= base.dist %>/',
                     src: ['fonts/{,*/}*.*']
                 }]
             }
@@ -85,7 +85,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: '<%= base.dev %>/images/',
                         src: ['**/*.{png, jpg, gif}'],
-                        dest: '<%= base.build %>/images/'
+                        dest: '<%= base.dist %>/images/'
                     }
                 ]
             }
@@ -122,11 +122,11 @@ module.exports = function(grunt) {
         },
 
         watch: {
-            'build-css': {
+            'dist-css': {
                 files: ['<%= base.dev %>/sass/**/*.{scss,sass}'],
                 tasks: ['compass:dev']
             },
-            'build-js': {
+            'dist-js': {
                 files: [
                     '<%= base.dev %>/js/*.js',
                     // '!<%= base.dev %>/js/tmpl.js',
@@ -134,11 +134,11 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['browserify:dev']
             },
-            'build-tmpl': {
+            'dist-tmpl': {
                 files: ['<%= base.dev %>/tmpl/*.html'],
                 tasks: ['jst']
             },
-            'build-lib': {
+            'dist-lib': {
                 files: ['<%= base.dev %>/js/lib/*.js'],
                 tasks: ['concat:dev']
             }
@@ -155,7 +155,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    '<%= base.build %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
+                    '<%= base.dist %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
                 }
             }
         },
@@ -182,8 +182,8 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    '<%= base.build %>/js/lib.min.js': ['<%= base.dev %>/js/lib.min.js'],
-                    '<%= base.build %>/js/main.min.js': ['<%= base.build %>/js/main.min.js']
+                    '<%= base.dist %>/js/lib.min.js': ['<%= base.dev %>/js/lib.min.js'],
+                    '<%= base.dist %>/js/main.min.js': ['<%= base.dist %>/js/main.min.js']
                 }
             }
         },
@@ -195,7 +195,7 @@ module.exports = function(grunt) {
                 length: 8
             },
             images: {
-                src: '<%= base.build %>/images/*.{jpg,jpeg,gif,png,webp}'
+                src: '<%= base.dist %>/images/*.{jpg,jpeg,gif,png,webp}'
             }
         },
 
@@ -210,7 +210,7 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: [
-                    {src: ['<%= base.dev %>/index.html'], dest: '<%= base.build %>/index.html'}
+                    {src: ['<%= base.dev %>/index.html'], dest: '<%= base.dist %>/index.html'}
                 ]
             }
         },
@@ -222,7 +222,7 @@ module.exports = function(grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    '<%= base.build %>/index.html': '<%= base.build %>/index.html'
+                    '<%= base.dist %>/index.html': '<%= base.dist %>/index.html'
                 }
             }
         }
@@ -239,9 +239,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('release', function() {
         grunt.task.run('clean:all');
-        // build templates
+        // dist templates
         grunt.task.run('jst');
-        // build js
+        // dist js
         grunt.task.run('browserify:dist');
         grunt.task.run('uglify');
         // minify css and copy
@@ -257,4 +257,6 @@ module.exports = function(grunt) {
         // html mini
         grunt.task.run('htmlmin');
     });
+
+    grunt.registerTask('dist', ['release']);
 };
