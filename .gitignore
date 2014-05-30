@@ -10,5 +10,5 @@
 /tmp
 /client/.tmp
 /client/dev/js/*.min.js
-/client/build
+/client/dist
 npm-debug.log
