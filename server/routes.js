@@ -4,7 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var conf = require('../config');
 var ctrl = require('./controller');
-var isWin = process.platform.match(/win32/);
+var isWin = !!process.platform.match(/win32/);
 
 module.exports = function(app, io) {
     app.get('/', handleHome(app));
