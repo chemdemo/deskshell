@@ -12,3 +12,4 @@
 /client/dist
 npm-debug.log
 /.tmp
+/client/dev
