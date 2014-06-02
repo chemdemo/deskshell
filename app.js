@@ -5,6 +5,7 @@
 
 'use strict';
 
+var debug = require('debug')('app');
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -13,7 +14,9 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sio = require('socket.io');
+// var session = require('express-session');
+// var memoryStore = session.MemoryStore;
+var io = require('socket.io');
 var term = require('term.js');
 
 var conf = require('./config');
@@ -24,18 +27,27 @@ var distStatic = path.resolve(__dirname, 'client/dist');
 
 var app = express();
 var env = app.get('env');
-var server = http.Server(app);
-var io = sio.listen(server);
+// var sessionStore = new memoryStore();
 
-app.set('views', path.join(__dirname, 'server/views'));
-app.set('view engine', 'ejs');
+var server = http.Server(app);
+var socket = io.listen(server, {log: 'development' === env});
+
+app.set('env', env);
+app.set('port', conf.port || 8090);
+app.set('host', conf.host || '127.0.0.1');
+// app.set('views', path.join(__dirname, 'server/views'));
+// app.set('view engine', 'ejs');
 
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-// app.use(cookieParser(conf.cookieSecret));
-// removed at v4.x
+app.use(cookieParser(conf.cookieSecret));
+// app.use(session({
+//     secret: conf.cookieSecret,
+//     cookie: {httpOnly: true, secure: true},
+//     store: sessionStore
+// }));
 
 if(env == 'development') {
     app.use(express.static(devStatic));
@@ -67,11 +79,11 @@ app.use(function(req, res, next) {
 // app.use(user.httpAuth);
 app.use(term.middleware());
 
-io.configure('procuction', function() {
-    io.enable('browser client etag');
-    io.set('log level', 1);
+socket.configure('procuction', function() {
+    socket.enable('browser client etag');
+    socket.set('log level', 1);
 
-    io.set('transports', [
+    socket.set('transports', [
         'websocket'
         , 'flashsocket'
         , 'htmlfile'
@@ -79,21 +91,20 @@ io.configure('procuction', function() {
         , 'jsonp-polling'
     ]);
 
-    io.set('authorization', user.wsAuth);
+    // socket.set('authorization', user.wsAuth);
 });
 
-io.configure('development', function() {
-    io.set('transports', ['websocket']);
+socket.configure('development', function() {
+    socket.set('transports', ['websocket']);
 });
 
-routes(app, io);
+routes(app, socket);
 
-// 404 || 50x
-app.use(function(err, req, res, next) {
-    if(err.status === 404) res.send('Page not found!');
-    else res.send(env == 'development' ? err.stack : 'Server error!');
-});
+function start() {
+    server.listen(app.get('port'), app.get('host'), function() {
+        debug('Express server listening on port ' + server.address().port);
+    });
+};
 
-server.listen(conf.port || 8090, conf.host || 'localhost');
-
-module.exports = app;
+if(!module.parent) start();
+else exports.start = start;
