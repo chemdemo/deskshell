@@ -1,6 +1,11 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
+
+var UglifyJS = require('uglify-js');
+
+var isWin = !!process.platform.match(/win32/);
 
 module.exports = function(grunt) {
     // show elapsed time at the end
@@ -12,65 +17,103 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         base: {
+            'tmp': '.tmp',
+            'src': 'client/src',
             'dev': 'client/dev',
             'dist': 'client/dist'
         },
 
         clean: {
-            all: {
+            tmp: {
+                src: ['<%= base.tmp %>']
+            },
+            dev: {
+                src: ['<%= base.dev %>']
+            },
+            dist: {
                 src: ['<%= base.dist %>']
             },
-            css: {
-                src: ['<%= base.dist %>/css/{,*/}*.css']
-            },
-            js: {
-                src: ['<%= base.dist %>/js/{,*/}*.js']
-            },
-            images: {
-                src: ['<%= base.dist %>/images/{,*/}*.{png, jpg}']
-            },
-            fonts: {
-                src: ['<%= base.dist %>/fonts/']
+            'dist-main-js': {
+                src: ['<%= base.dist %>/js/main.js']
             }
         },
 
         copy: {
-            css: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= base.dev %>/',
-                    dest: '<%= base.dist %>/',
-                    src: ['css/{,*/}*.min.css']
-                }]
+            dev: {
+                files: [
+                    {
+                        dot: true,
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dev %>/',
+                        src: ['fonts/{,*/}*.*']
+                    },
+                    {
+                        dot: true,
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dev %>/',
+                        src: ['images/*.{png, jpg, gif}']
+                    },
+                    {
+                        dot: true,
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dev %>/',
+                        src: ['css/*.css']
+                    },
+                    {
+                        dot: true,
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dev %>/',
+                        src: ['js/lib/*.js']
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dev %>/',
+                        src: ['./*.html']
+                    }
+                ]
             },
-            fonts: {
+            // dist: {
+            //     files: [
+            //         {
+            //             expand: true,
+            //             cwd: '<%= base.src %>/',
+            //             dest: '<%= base.dist %>/',
+            //             src: ['./*.html']
+            //         }
+            //     ]
+            // },
+            'dist-fonts': {
                 files: [{
-                    expand: true,
                     dot: true,
-                    cwd: '<%= base.dev %>/',
+                    expand: true,
+                    cwd: '<%= base.src %>/',
                     dest: '<%= base.dist %>/',
                     src: ['fonts/{,*/}*.*']
+                }]
+            },
+            'dist-img': {
+                files: [{
+                    dot: true,
+                    expand: true,
+                    dest: '<%= base.dist %>/',
+                    cwd: '<%= base.src %>/',
+                    src: ['images/*.{png, jpg, gif}']
                 }]
             }
         },
 
         compass: {
-            dev: {
+            complie: {
                 options: {
-                    sassDir: '<%= base.dev %>/sass',
-                    cssDir: '<%= base.dev %>/css'
-                }
-            },
-            dist: {
-                options: {
-                    sassDir: '<%= base.dev %>/sass',
-                    cssDir: '<%= base.dev %>/css',
-                    outputStyle: 'compressed',
-                    force: true,
-                    environment: 'production',
-                    assetCacheBuster: false,
-                    relativeAssets: false
+                    relativeAssets: true,
+                    sassDir: '<%= base.src %>/scss',
+                    imagesDir: '<%= base.src %>/images',
+                    cssDir: '<%= base.src %>/css'
                 }
             }
         },
@@ -83,9 +126,15 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: '<%= base.dev %>/images/',
+                        cwd: '<%= base.src %>/images/',
                         src: ['**/*.{png, jpg, gif}'],
                         dest: '<%= base.dist %>/images/'
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= base.src %>/fonts/',
+                        src: ['**/*'],
+                        dest: '<%= base.dist %>/fonts/'
                     }
                 ]
             }
@@ -94,21 +143,15 @@ module.exports = function(grunt) {
         jst: {
             compile: {
                 options: {
-                    // module: true,
-                    // provider: 'lodash',
-                    namespace: 'Tmpl',
+                    // amd: true,
+                    namespace: 'JST',
                     processName: function(filename) {
                         var f = path.basename(filename, '.html');
                         return f.replace(/(?:_|-)(\w{1}?)/g, function(m) {
                             return m.toUpperCase().slice(1);
                         });
                     },
-                    prettify: true,
-                    // templateSettings: {
-                    //     evaluate: /\{\{=(.+?)\}\}/g,
-                    //     interpolate: /\{\{(.+?)\}\}/g,
-                    //     escape: /\{\{-(.+?)\}\}/g
-                    // },
+                    prettify: false,
                     processContent: function(src) {
                         return src
                             .replace(/\<\!\-\-[\s\S]*?\-\-\>/g, '') // remove comments
@@ -116,31 +159,59 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    '<%= base.dev %>/js/tmpl.js': ['<%= base.dev %>/tmpl/*.html']
+                    '<%= base.src %>/js/tmpl.js': ['<%= base.src %>/tmpl/*.html']
                 }
             }
         },
 
-        watch: {
-            'dist-css': {
-                files: ['<%= base.dev %>/sass/**/*.{scss,sass}'],
-                tasks: ['compass:dev']
+        useminPrepare: {
+            options: {
+                dest: '<%= base.dist %>/'
             },
-            'dist-js': {
+            html: {
+                src: ['<%= base.src %>/*.html']
+            }
+        },
+
+        rev: {
+            dist: {
+                options: {
+                    algorithm: 'sha1',
+                    length: 4
+                },
+                src: [
+                    '<%= base.dist %>/js/*.js',
+                    '<%= base.dist %>/css/*.css'/*,
+                    '<%= base.dist %>/img/*.{jpg,jpeg,png,gif}'*/
+                ]
+            }
+        },
+
+        usemin: {
+            html: ['<%= base.dist %>/*.html']
+        },
+
+        watch: {
+            scss: {
+                files: ['<%= base.src %>/scss/**/*.{scss,sass}'],
+                tasks: ['compass']
+            },
+            tmpl: {
+                files: ['<%= base.src %>/tmpl/*.html'],
+                tasks: ['jst', 'browserify:dev']
+            },
+            js: {
                 files: [
-                    '<%= base.dev %>/js/*.js',
-                    // '!<%= base.dev %>/js/tmpl.js',
-                    '!<%= base.dev %>/js/*.min.js'
+                    '<%= base.src %>/js/*.js',
+                    '<%= base.src %>/js/cls/*.js'
                 ],
                 tasks: ['browserify:dev']
             },
-            'dist-tmpl': {
-                files: ['<%= base.dev %>/tmpl/*.html'],
-                tasks: ['jst']
-            },
-            'dist-lib': {
-                files: ['<%= base.dev %>/js/lib/*.js'],
-                tasks: ['concat:dev']
+            html: {
+                files: [
+                    '<%= base.src %>/index.html'
+                ],
+                tasks: ['copySrcHtml']
             }
         },
 
@@ -150,68 +221,30 @@ module.exports = function(grunt) {
                     debug: true
                 },
                 files: {
-                    '<%= base.dev %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
+                    '<%= base.dev %>/js/main.js': ['<%= base.src %>/js/main.js']
                 }
             },
-            dist: {
-                files: {
-                    '<%= base.dist %>/js/main.min.js': ['<%= base.dev %>/js/main.js']
-                }
-            }
-        },
-
-        concat: {
-            dev: {
-                src: [
-                    '<%= base.dev %>/js/lib/jquery.js',
-                    '<%= base.dev %>/js/lib/underscore.js',
-                    // '<%= base.dev %>/js/lib/bootstrap.js',
-                ],
-                dest: '<%= base.dev %>/js/lib.min.js'
-            }
-        },
-
-        uglify: {
-            options: {
-                compress: true,
-                report: 'gzip',
-                preserveComments: false/*,
-                mangle: {
-                    except: ['jQuery', 'Underscore']
-                }*/
-            },
-            dist: {
-                files: {
-                    '<%= base.dist %>/js/lib.min.js': ['<%= base.dev %>/js/lib.min.js'],
-                    '<%= base.dist %>/js/main.min.js': ['<%= base.dist %>/js/main.min.js']
-                }
-            }
-        },
-
-        filerev: {
-            options: {
-                encoding: 'utf8',
-                algorithm: 'md5',
-                length: 8
-            },
-            images: {
-                src: '<%= base.dist %>/images/*.{jpg,jpeg,gif,png,webp}'
-            }
-        },
-
-        replace: {
             dist: {
                 options: {
-                    patterns: [
-                        {
-                            match: 'timestamp',
-                            replacement: '<%= new Date().getTime() %>'
+                    // uglify
+                    postBundleCB: function(err, src, next) {
+                        if(!err) {
+                            try {
+                                // https://github.com/mishoo/UglifyJS2#the-simple-way
+                                var result = UglifyJS.minify(src, {fromString: true});
+                                next(null, result.code);
+                            } catch(e) {
+                                next(e);
+                            }
+                        } else {
+                            grunt.log.writeln('uglify dist err:', err.stack);
+                            throw err;
                         }
-                    ]
+                    }
                 },
-                files: [
-                    {src: ['<%= base.dev %>/index.html'], dest: '<%= base.dist %>/index.html'}
-                ]
+                files: {
+                    '<%= base.dist %>/js/main.js': ['<%= base.src %>/js/main.js']
+                }
             }
         },
 
@@ -228,35 +261,54 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('copySrcHtml', 'copy html file to dev or dist path', function(dir) {
+        var done = this.async();
+        var src = path.resolve(__dirname, 'client/src/index.html');
+        var dest = path.resolve(__dirname, 'client/' + (dir || 'dev') + '/index.html');
+
+        grunt.file.copy(src, dest);
+
+        done();
+    });
+
     grunt.registerTask('default', function() {
+        grunt.task.run('clean:dev');
+        grunt.task.run('copy:dev');
         grunt.task.run('jst');
-        // concat js lib files
-        grunt.task.run('concat');
         grunt.task.run('browserify:dev');
-        grunt.task.run('compass:dev');
+        grunt.task.run('compass');
         grunt.task.run('watch');
     });
 
     grunt.registerTask('release', function() {
-        grunt.task.run('clean:all');
-        // dist templates
+        grunt.task.run('clean:tmp');
+        grunt.task.run('clean:dist');
+        // build css
+        grunt.task.run('compass');
+        // minify images & fonts
+        if(!isWin) {
+            grunt.task.run('imagemin');
+        } else {
+            grunt.task.run('copy:dist-img');
+            grunt.task.run('copy:dist-fonts');
+        }
+        // grunt.task.run('copy:dist');
+        grunt.task.run('copySrcHtml:dist');
+        // build templates
         grunt.task.run('jst');
-        // dist js
+        // build js
         grunt.task.run('browserify:dist');
-        grunt.task.run('uglify');
-        // minify css and copy
-        grunt.task.run('compass:dist');
-        // minify images
-        grunt.task.run('imagemin');
-        // minify fonts & css
-        grunt.task.run('copy');
-        // update image name by the md5 value
-        // grunt.task.run('filerev');
-        // update timestemp
-        grunt.task.run('replace');
+        grunt.task.run('useminPrepare');
+        grunt.task.run('concat:generated');
+        grunt.task.run('cssmin');
+        grunt.task.run('uglify:generated');
+        grunt.task.run('rev');
+        grunt.task.run('usemin');
+        grunt.task.run('clean:dist-main-js');
         // html mini
-        grunt.task.run('htmlmin');
+        // grunt.task.run('htmlmin');
     });
 
+    grunt.registerTask('dev', ['default']);
     grunt.registerTask('dist', ['release']);
 };
