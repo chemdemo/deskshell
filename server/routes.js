@@ -44,6 +44,8 @@ function handleConf(app) {
 };
 
 function handleErr(app) {
+    var env = app.get('env');
+
     return function(err, req, res, next) {
         if(err.status === 404) res.send('Page not found!');
         else res.send(env == 'development' ? err.stack : 'Server error!');
