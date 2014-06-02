@@ -10,7 +10,7 @@ var inherits = Terminal.inherits;
 var on = Terminal.on;
 var off = Terminal.off;
 var cancel = Terminal.cancel;
-var helper = require('./helper');
+var helper = require('../helper');
 
 var TermTab = module.exports = function(mgr, options) {
     if(!(this instanceof TermTab)) return new TermTab(mgr, options);

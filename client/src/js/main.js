@@ -7,9 +7,8 @@
 
 function init() {
     var ui = require('./ui');
-    var tmpl = require('./tmpl')['Tmpl'];
-    var PanelManager = require('./PanelManager');
-    var TermManager = require('./TermManager');
+    var PanelManager = require('./cls/PanelManager');
+    var TermManager = require('./cls/TermManager');
 
     $.get('/config', function(conf) {
         // console.log(conf);
@@ -17,8 +16,6 @@ function init() {
     });
 
     // new TermManager();
-
-    // $('#files').html(tmpl['fileList']({list: mock.fileList}));
 };
 
 $(document).ready(init);

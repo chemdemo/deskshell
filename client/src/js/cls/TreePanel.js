@@ -3,8 +3,8 @@
  * Copyright (c) 2013-2014, dmyang<yangdemo@gmail.com> (MIT License)
  */
 
-var helper = require('./helper');
-var tmpl = require('./tmpl')['Tmpl'];
+var helper = require('../helper');
+var jst = require('../tmpl')['JST'];
 var _proto = TreePanel.prototype;
 
 function TreePanel(panelMgr) {
@@ -90,7 +90,7 @@ _proto.load = function(options) {
 _proto.insert = function(list, parentNode) {
     var s = '<ul>';
 
-    s += tmpl['pathTree']({list: $.isArray(list) ? list : [list]});
+    s += jst['pathTree']({list: $.isArray(list) ? list : [list]});
     s += '</ul>';
 
     // parentNode.html(s);

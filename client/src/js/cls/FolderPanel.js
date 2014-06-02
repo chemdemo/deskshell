@@ -5,7 +5,7 @@
 
 'use strict';
 
-var tmpl = require('./tmpl')['Tmpl'];
+var jst = require('../tmpl')['JST'];
 var _proto = FolderPanel.prototype;
 
 function FolderPanel(id, data) {
@@ -17,7 +17,7 @@ function FolderPanel(id, data) {
 };
 
 _proto.fill = function(list) {
-    $('#' + this.id).html(tmpl['fileList']({list: $.isArray(list) ? list : [list]}));
+    $('#' + this.id).html(jst['fileList']({list: $.isArray(list) ? list : [list]}));
 };
 
 _proto.setContent = function() {

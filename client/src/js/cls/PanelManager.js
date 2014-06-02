@@ -5,7 +5,7 @@
 
 'use strict';
 
-var helper = require('./helper');
+var helper = require('../helper');
 var TreePanel = require('./TreePanel');
 var FolderPanel = require('./FolderPanel');
 var EditorPanel = require('./EditorPanel');

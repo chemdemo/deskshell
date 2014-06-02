@@ -8,7 +8,7 @@
 var EventEmitter = Terminal.EventEmitter;
 var inherits = Terminal.inherits;
 var TermTab = require('./TermTab');
-var helper = require('./helper');
+var helper = require('../helper');
 
 var TermManager = module.exports = function() {
     if(!(this instanceof TermManager)) return new TermManager();
