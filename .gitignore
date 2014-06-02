@@ -11,3 +11,4 @@
 /client/dev/js/*.min.js
 /client/dist
 npm-debug.log
+/.tmp
