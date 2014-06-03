@@ -77,16 +77,16 @@ module.exports = function(grunt) {
                     }
                 ]
             },
-            // dist: {
-            //     files: [
-            //         {
-            //             expand: true,
-            //             cwd: '<%= base.src %>/',
-            //             dest: '<%= base.dist %>/',
-            //             src: ['./*.html']
-            //         }
-            //     ]
-            // },
+            'dist-html': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= base.src %>/',
+                        dest: '<%= base.dist %>/',
+                        src: ['./*.html']
+                    }
+                ]
+            },
             'dist-fonts': {
                 files: [{
                     dot: true,
@@ -292,8 +292,8 @@ module.exports = function(grunt) {
             grunt.task.run('copy:dist-img');
             grunt.task.run('copy:dist-fonts');
         }
-        // grunt.task.run('copy:dist');
-        grunt.task.run('copySrcHtml:dist');
+        grunt.task.run('copy:dist-html');
+        // grunt.task.run('copySrcHtml:dist');
         // build templates
         grunt.task.run('jst');
         // build js
