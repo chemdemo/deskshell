@@ -9,9 +9,9 @@ http://fontawesome.io/icons/
 
 http://www.mongohq.com/
 http://www.promisejs.org/intro/
-<<<<<<< HEAD
 
 http://vimeo.com/77265280
-=======
+
 http://www.ui.cn/
->>>>>>> fa47016aeb9e1daf12ea0da216b77505b7f0bdba
+
+http://ionicframework.com/
